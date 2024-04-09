@@ -1,6 +1,15 @@
 import streamlit as st
 import pandas as pd
 
+st.write("# Database Demo")
+
+st.markdown(
+    """
+    In this section, users can access and interact with the database effortlessly through our user-friendly interface. 
+    Users will view data or perform operations. This page is still under construction, more features are coming.
+    """
+)
+
 def load_data(uploaded_file):
     data = pd.read_csv(uploaded_file)
     return data
