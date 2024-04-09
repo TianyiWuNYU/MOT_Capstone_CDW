@@ -20,7 +20,7 @@ LOGGER = get_logger(__name__)
 
 def run():
     st.set_page_config(
-        page_title="Hello",
+        page_title="NYU-MOT-CDW",
         page_icon="👋",
     )
 
@@ -30,13 +30,14 @@ def run():
 
     st.markdown(
         """
-        ###Project Introduction
+        ### Project Introduction
         This website, as the final phase of the capstone project, will contain all deliverables of the project and serve as a publicly accessible site for displaying maps.
         
         In this web application, based on the Streamlit framework, the team developed an interactive dashboard to visualize CDW flows in a variety of graphical views. This tool is useful in policy development for CDW recycling and reuse, providing insight into annual flow trends by material type, transaction, and destination, potentially facilitating a more sustainable approach to CDW management.
-        ### How to Start？    """
+        ### How to Start？    
+        """
     )
-    st.markdown("""<iframe width="800" height="450" src="//player.bilibili.com/player.html?aid=707888660&bvid=BV1SQ4y1E7ZL&cid=1384252719&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+    st.markdown("""<iframe width="800" height="450" src="https://www.youtube.com/watch?v=K4TOrB7at0Y" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
                 """, unsafe_allow_html=True)
     
 
