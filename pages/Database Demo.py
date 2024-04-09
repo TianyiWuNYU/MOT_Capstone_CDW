@@ -6,7 +6,8 @@ st.write("# Database Demo")
 st.markdown(
     """
     In this section, users can access and interact with the database effortlessly through our user-friendly interface. 
-    Users will view data or perform operations. This page is still under construction, more features are coming.
+    Users will view data or perform operations. 
+    ### This page is still under construction, and now we need the dataset files uploaded. more features are coming soon.
     """
 )
 
@@ -17,7 +18,7 @@ def load_data(uploaded_file):
 if 'init' not in st.session_state:
     st.session_state['init'] = True
 if st.session_state['init']:
-    if st.button('start!'):
+    if st.button('Upload Your Dataset'):
         st.session_state['init'] = False
 
 if not st.session_state['init']:
