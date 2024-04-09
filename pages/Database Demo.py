@@ -1,27 +1,19 @@
 import streamlit as st
 import pandas as pd
 
-# 定义加载数据的函数
 def load_data(uploaded_file):
     data = pd.read_csv(uploaded_file)
     return data
 
-# 显示初始页面，包含图片和继续按钮
 if 'init' not in st.session_state:
-    st.session_state['init'] = True  # 初始状态为True，显示欢迎页面
-
+    st.session_state['init'] = True
 if st.session_state['init']:
-    # 使用GitHub图片的URL（确保URL是公开的）
-    #github_image_url = 'https://github.com/bronzekillervan/ddc/blob/main/203d909c2f8e428ec1828d27b0cca0b.png?raw=true'
-    #st.image(github_image_url, caption='孩子们，我回来了')
     if st.button('start!'):
-        st.session_state['init'] = False  # 用户点击后，切换状态
+        st.session_state['init'] = False
 
-# 当用户点击继续后，显示文件上传器和数据操作界面
 if not st.session_state['init']:
     uploaded_file = st.file_uploader("Please upload a csv file.")
     if uploaded_file is not None:
-        # 确保会话状态中的数据是最新的
         if 'data' not in st.session_state or st.session_state.uploaded_file_name != uploaded_file.name:
             st.session_state.data = load_data(uploaded_file)
             st.session_state.uploaded_file_name = uploaded_file.name
