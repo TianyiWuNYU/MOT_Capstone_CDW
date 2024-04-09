@@ -26,8 +26,6 @@ def run():
 
     st.write("# Welcome to CDW Project! 👋")
 
-    st.sidebar.success("Select a function above.")
-
     st.markdown(
         """
         ### Project Introduction
