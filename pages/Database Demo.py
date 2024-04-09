@@ -7,7 +7,7 @@ st.markdown(
     """
     In this section, users can access and interact with the database effortlessly through our user-friendly interface. 
     Users will view data or perform operations. 
-    <strong>This page is still under construction, and now we need the dataset files uploaded. more features are coming soon.</strong>
+    **This page is still under construction, and now we need the dataset files uploaded. more features are coming soon.**
     """
 )
 
