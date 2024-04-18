@@ -18,7 +18,7 @@ def load_test():
 def load_pickup_book():
     return pd.read_csv('data/pickup_address_book.csv')
 
-pickup_book = load_address_book()
+pickup_book = load_pickup_book()
 
 with st.form("my_form"):
     address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['name'].tolist())
