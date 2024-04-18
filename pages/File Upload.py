@@ -35,13 +35,14 @@ address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['dis
 
 def update_add_field(selected_option):
     st.session_state.selected_option = selected_option
-    selected_address = pickup_book[pickup_book['display'] == address_option]
-    st.session_state.selected_name = selected_address['name'].iloc[0]
-    st.session_state.selected_address = selected_address['address'].iloc[0]
-    st.session_state.selected_city = selected_address['city'].iloc[0]
-    st.session_state.selected_state = selected_address['state'].iloc[0]
-    st.session_state.selected_zip = selected_address['zip'].iloc[0]
-    st.experimental_rerun()
+    if selected_option:
+        selected_address = pickup_book[pickup_book['display'] == address_option]
+        st.session_state.selected_name = selected_address['name'].iloc[0]
+        st.session_state.selected_address = selected_address['address'].iloc[0]
+        st.session_state.selected_city = selected_address['city'].iloc[0]
+        st.session_state.selected_state = selected_address['state'].iloc[0]
+        st.session_state.selected_zip = selected_address['zip'].iloc[0]
+        st.experimental_rerun()
 
 if address_option != st.session_state.selected_option:
     update_add_field(address_option)
