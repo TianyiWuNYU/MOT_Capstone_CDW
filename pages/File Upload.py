@@ -16,23 +16,35 @@ def load_test():
 def load_pickup_book():
     return pd.read_csv('data/pickup_address_book.csv')
 
+if 'selected_name' not in st.session_state:
+    st.session_state.selected_name = ""
+if 'selected_address' not in st.session_state:
+    st.session_state.selected_address = ""
+if 'selected_state' not in st.session_state:
+    st.session_state.selected_state = ""
+if 'selected_city' not in st.session_state:
+    st.session_state.selected_city = ""
+if 'selected_zip' not in st.session_state:
+    st.session_state.selected_zip = ""
+
+
 pickup_book = load_pickup_book()
 pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 
 with st.form("my_form"):
-    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist())
-    ln = st.text_input("Location Name")
-    add = st.text_input("Address")
-    ct = st.text_input("City")
-    ste = st.text_input("State")
-    zp = st.text_input("Zip")
+    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), on_change=lambda: update_add_field(address_option))
+    ln = st.text_input("Location Name", value=st.session_state.selected_name)
+    add = st.text_input("Address", value=st.session_state.selected_address)
+    ct = st.text_input("City", value=st.session_state.selected_city)
+    ste = st.text_input("State". value=st.session_state.selected_state)
+    zp = st.text_input("Zip". value=st.session_state.selected_zip)
     if address_option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
-        ln = selected_address['name'].iloc[0]
-        add = selected_address['address'].iloc[0]
-        ct = selected_address['city'].iloc[0]
-        ste = selected_address['state'].iloc[0]
-        zp = selected_address['zip'].iloc[0]
+        name = selected_address['name'].iloc[0]
+        address = selected_address['address'].iloc[0]
+        city = selected_address['city'].iloc[0]
+        state = selected_address['state'].iloc[0]
+        zip = selected_address['zip'].iloc[0]
     else:
         name = ln
         address = add
@@ -40,6 +52,14 @@ with st.form("my_form"):
         state = ste
         zip = zp
     submitted = st.form_submit_button("Submit")
+
+def update_add_field(selected_option):
+    selected_address = pickup_book[pickup_book['display'] == address_option]
+    st.session_state.selected_name = selected_address['name'].iloc[0]
+    st.session_state.selected_address = selected_address['address'].iloc[0]
+    st.session_state.selected_city = selected_address['city'].iloc[0]
+    st.session_state.selected_state = selected_address['state'].iloc[0]
+    st.session_state.selected_zip = selected_address['zip'].iloc[0]
 
 if submitted:
     with open('data/test.csv', 'a', newline='', encoding='utf-8') as f:
