@@ -13,10 +13,10 @@ st.markdown(
 )
 
 def load_test():
-    return pd.read_csv('test.csv')
+    return pd.read_csv('data/test.csv')
 
 def load_pickup_book():
-    return pd.read_csv('pickup_address_book.csv')
+    return pd.read_csv('data/pickup_address_book.csv')
 
 pickup_book = load_address_book()
 
