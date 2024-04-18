@@ -26,6 +26,7 @@ with st.form("my_form"):
     ct = st.text_input("City")
     st = st.text_input("State")
     z = st.text_input("Zip")
+    submitted = st.form_submit_button("Submit")
     if address_option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
         name = selected_address['name'].iloc[0]
@@ -33,14 +34,12 @@ with st.form("my_form"):
         city = selected_address['city'].iloc[0]
         state = selected_address['state'].iloc[0]
         zip = selected_address['zip'].iloc[0]
-        submitted = st.form_submit_button("Submit")
     else:
         name = ln
         address = add
         city = ct
         state = st
         zip = z
-        submitted = st.form_submit_button("Submit")
 
 if submitted:
     with open('data/test.csv', 'a', newline='', encoding='utf-8') as f:
