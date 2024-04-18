@@ -19,9 +19,10 @@ def load_pickup_book():
     return pd.read_csv('data/pickup_address_book.csv')
 
 pickup_book = load_pickup_book()
+pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 
 with st.form("my_form"):
-    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['name','address'].tolist())
+    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist())
     if address_option:
       selected_address = pickup_book[pickup_book['name'] == address_option]
       address = selected_address['address'].iloc[0]
