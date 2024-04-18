@@ -21,6 +21,11 @@ pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 
 with st.form("my_form"):
     address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist())
+    ln = st.text_input("Location Name")
+    add = st.text_input("Address")
+    ct = st.text_input("City")
+    st = st.text_input("State")
+    z = st.text_input("Zip")
     if address_option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
         name = selected_address['name'].iloc[0]
@@ -29,11 +34,11 @@ with st.form("my_form"):
         state = selected_address['state'].iloc[0]
         zip = selected_address['zip'].iloc[0]
     else:
-        name = st.text_input("Location Name")
-        address = st.text_input("Address")
-        city = st.text_input("City")
-        state = st.text_input("State")
-        zip = st.text_input("Zip")
+        name = ln
+        address = add
+        city = ct
+        state = st
+        zip = z
     submitted = st.form_submit_button("Submit")
 
 if submitted:
