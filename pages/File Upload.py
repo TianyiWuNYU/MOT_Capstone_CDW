@@ -23,11 +23,13 @@ with st.form("my_form"):
     address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist())
     if address_option:
         selected_address = pickup_book[pickup_book['name'] == address_option]
+        name = selected_address['name'].iloc[0]
         address = selected_address['address'].iloc[0]
         city = selected_address['city'].iloc[0]
         state = selected_address['state'].iloc[0]
         zip = selected_address['zip'].iloc[0]
     else:
+        name = st.test_input("Location Name")
         address = st.text_input("Address")
         city = st.text_input("City")
         state = st.text_input("State")
@@ -38,7 +40,7 @@ with st.form("my_form"):
 if submitted:
     with open('data/test.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow([address, city, state, zip])
+        writer.writerow([name, address, city, state, zip])
         st.success("Submit Success")
 
 st.write("test dataset", load_test())
