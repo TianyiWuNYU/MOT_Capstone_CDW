@@ -16,6 +16,8 @@ def load_test():
 def load_pickup_book():
     return pd.read_csv('data/pickup_address_book.csv')
 
+if 'selected_option' not in st.session_state:
+    st.session_state.selected_option = ""
 if 'selected_name' not in st.session_state:
     st.session_state.selected_name = ""
 if 'selected_address' not in st.session_state:
