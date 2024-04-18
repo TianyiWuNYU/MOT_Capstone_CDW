@@ -8,21 +8,27 @@ age_options = {
     "15 years old": "15"
 }
 
-# 使用 Streamlit 的状态管理来保存选中的选项
-if 'selected_age' not in st.session_state:
-    st.session_state['selected_age'] = ""
+# 初始化或获取当前会话状态中的选项
+if 'selected_option' not in st.session_state:
+    st.session_state.selected_option = ""
 
 # 创建下拉选择框，不在表单内，以便可以立即响应用户的选择
-selected_option = st.selectbox('Choose an age:', list(age_options.keys()), on_change=lambda: update_age(selected_option))
+selected_option = st.selectbox('Choose an age:', list(age_options.keys()), index=list(age_options.keys()).index(st.session_state.selected_option))
 
-# 更新年龄输入框的函数
+# 更新选项
 def update_age(option):
-    st.session_state['selected_age'] = age_options[option]
+    st.session_state.selected_option = option
+    # 刷新页面以更新输入框
+    st.experimental_rerun()
+
+# 检测选择的改变并更新
+if selected_option != st.session_state.selected_option:
+    update_age(selected_option)
 
 # 创建表单
 with st.form(key='my_form'):
     # 显示一个文本输入框，其内容根据下拉选择自动填充
-    age_input = st.text_input('Age:', value=st.session_state['selected_age'])
+    age_input = st.text_input('Age:', value=age_options[st.session_state.selected_option])
 
     # 提交按钮
     submit_button = st.form_submit_button(label='Submit')
