@@ -28,11 +28,11 @@ with st.form("my_form"):
     zp = st.text_input("Zip")
     if address_option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
-        name = selected_address['name'].iloc[0]
-        address = selected_address['address'].iloc[0]
-        city = selected_address['city'].iloc[0]
-        state = selected_address['state'].iloc[0]
-        zip = selected_address['zip'].iloc[0]
+        ln = selected_address['name'].iloc[0]
+        add = selected_address['address'].iloc[0]
+        ct = selected_address['city'].iloc[0]
+        ste = selected_address['state'].iloc[0]
+        zp = selected_address['zip'].iloc[0]
     else:
         name = ln
         address = add
