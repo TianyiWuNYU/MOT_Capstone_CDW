@@ -36,8 +36,8 @@ with st.form("my_form"):
     ln = st.text_input("Location Name", value=st.session_state.selected_name)
     add = st.text_input("Address", value=st.session_state.selected_address)
     ct = st.text_input("City", value=st.session_state.selected_city)
-    ste = st.text_input("State". value=st.session_state.selected_state)
-    zp = st.text_input("Zip". value=st.session_state.selected_zip)
+    ste = st.text_input("State", value=st.session_state.selected_state)
+    zp = st.text_input("Zip", value=st.session_state.selected_zip)
     if address_option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
         name = selected_address['name'].iloc[0]
