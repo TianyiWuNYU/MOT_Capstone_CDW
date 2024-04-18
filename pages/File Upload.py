@@ -32,12 +32,17 @@ pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), on_change=lambda: update_add_field(address_option))
 
 def update_add_field(selected_option):
+    st.session_state.selected_option = selected_option
     selected_address = pickup_book[pickup_book['display'] == address_option]
     st.session_state.selected_name = selected_address['name'].iloc[0]
     st.session_state.selected_address = selected_address['address'].iloc[0]
     st.session_state.selected_city = selected_address['city'].iloc[0]
     st.session_state.selected_state = selected_address['state'].iloc[0]
     st.session_state.selected_zip = selected_address['zip'].iloc[0]
+    st.experimental_rerun()
+
+if address_option != st.session_state.selected_option:
+    update_add_field(address_option)
 
 with st.form("my_form"):
     name = st.text_input("Location Name", value=st.session_state.selected_name)
