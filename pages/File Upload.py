@@ -29,7 +29,7 @@ with st.form("my_form"):
         state = selected_address['state'].iloc[0]
         zip = selected_address['zip'].iloc[0]
     else:
-        name = st.test_input("Location Name")
+        name = st.text_input("Location Name")
         address = st.text_input("Address")
         city = st.text_input("City")
         state = st.text_input("State")
