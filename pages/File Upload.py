@@ -34,7 +34,6 @@ with st.form("my_form"):
         city = st.text_input("City")
         state = st.text_input("State")
         zip = st.text_input("Zip")
-    
     submitted = st.form_submit_button("submit")
 
 if submitted:
