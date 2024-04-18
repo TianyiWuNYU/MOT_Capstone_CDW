@@ -25,7 +25,7 @@ with st.form("my_form"):
     add = st.text_input("Address")
     ct = st.text_input("City")
     st = st.text_input("State")
-    z = st.text_input("Zip")
+    zp = st.text_input("Zip")
     if address_option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
         name = selected_address['name'].iloc[0]
@@ -38,7 +38,7 @@ with st.form("my_form"):
         address = add
         city = ct
         state = st
-        zip = z
+        zip = zp
     submitted = st.form_submit_button("Submit")
 
 if submitted:
