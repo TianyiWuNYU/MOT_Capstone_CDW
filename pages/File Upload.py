@@ -22,7 +22,7 @@ pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 with st.form("my_form"):
     address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist())
     if address_option:
-        selected_address = pickup_book[pickup_book['name'] == address_option]
+        selected_address = pickup_book[pickup_book['display'] == address_option]
         name = selected_address['name'].iloc[0]
         address = selected_address['address'].iloc[0]
         city = selected_address['city'].iloc[0]
