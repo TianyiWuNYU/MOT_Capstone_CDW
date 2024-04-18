@@ -6,8 +6,6 @@ st.write("# Data Input")
 
 st.markdown(
     """
-    In this section, users can access and interact with the database effortlessly through our user-friendly interface. 
-    Users will view data or perform operations. 
     **This page is still under construction, and now we need the dataset files uploaded. more features are coming soon.**
     """
 )
@@ -38,7 +36,7 @@ with st.form("my_form"):
     submitted = st.form_submit_button("submit")
 
 if submitted:
-    with open('test.csv', 'a', newline='', encoding='utf-8') as f:
+    with open('data/test.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([address, city, state, zip])
         st.success("Submit Success")
