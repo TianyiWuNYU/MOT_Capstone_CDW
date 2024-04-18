@@ -1,38 +1,57 @@
 import streamlit as st
+import pandas as pd
+import csv
 
-# 下拉框选项和对应的自动填充年龄数据
-age_options = {
-    "": "",
-    "13 years old": "13",
-    "14 years old": "14",
-    "15 years old": "15"
-}
+st.title("Data Input")
+st.markdown("**This page is still under construction. More features are coming soon.**")
 
-# 初始化或获取当前会话状态中的选项
-if 'selected_option' not in st.session_state:
-    st.session_state.selected_option = ""
+# Load data functions
+def load_test():
+    return pd.read_csv('data/test.csv')
 
-# 创建下拉选择框，不在表单内，以便可以立即响应用户的选择
-selected_option = st.selectbox('Choose an age:', list(age_options.keys()), index=list(age_options.keys()).index(st.session_state.selected_option))
+def load_pickup_book():
+    try:
+        data = pd.read_csv('data/pickup_address_book.csv')
+        data['display'] = data['name'] + ' - ' + data['address']
+        return data
+    except FileNotFoundError:
+        return pd.DataFrame(columns=['name', 'address', 'city', 'state', 'zip', 'display'])
 
-# 更新选项
-def update_age(option):
-    st.session_state.selected_option = option
-    # 刷新页面以更新输入框
-    st.experimental_rerun()
+# Load address book and manage session state
+pickup_book = load_pickup_book()
+if 'selected_display' not in st.session_state:
+    st.session_state['selected_display'] = ""
 
-# 检测选择的改变并更新
-if selected_option != st.session_state.selected_option:
-    update_age(selected_option)
+# Update function for dropdown
+def update_address_fields(option):
+    if option:
+        selected_data = pickup_book[pickup_book['display'] == option].iloc[0]
+        st.session_state['selected_name'] = selected_data['name']
+        st.session_state['selected_address'] = selected_data['address']
+        st.session_state['selected_city'] = selected_data['city']
+        st.session_state['selected_state'] = selected_data['state']
+        st.session_state['selected_zip'] = selected_data['zip']
 
-# 创建表单
-with st.form(key='my_form'):
-    # 显示一个文本输入框，其内容根据下拉选择自动填充
-    age_input = st.text_input('Age:', value=age_options[st.session_state.selected_option])
+# Address dropdown selector
+address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), index=pickup_book['display'].tolist().index(st.session_state['selected_display']) if st.session_state['selected_display'] in pickup_book['display'].tolist() else 0)
+if address_option != st.session_state['selected_display']:
+    st.session_state['selected_display'] = address_option
+    update_address_fields(address_option)
 
-    # 提交按钮
-    submit_button = st.form_submit_button(label='Submit')
+# Form for data input
+with st.form("my_form"):
+    name = st.text_input("Location Name", value=st.session_state.get('selected_name', ''))
+    address = st.text_input("Address", value=st.session_state.get('selected_address', ''))
+    city = st.text_input("City", value=st.session_state.get('selected_city', ''))
+    state = st.text_input("State", value=st.session_state.get('selected_state', ''))
+    zip_code = st.text_input("Zip", value=st.session_state.get('selected_zip', ''))
+    submitted = st.form_submit_button("Submit")
 
-# 检查表单是否被提交并处理数据
-if submit_button:
-    st.write(f'You have selected: {selected_option}, which corresponds to age {age_input}.')
+    if submitted:
+        with open('data/test.csv', 'a', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow([name, address, city, state, zip_code])
+            st.success("Data submitted successfully!")
+
+# Display updated dataset
+st.write("Updated dataset:", load_test())
