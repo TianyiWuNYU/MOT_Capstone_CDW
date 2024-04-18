@@ -41,11 +41,12 @@ def update_add_field(selected_option):
     st.session_state.selected_zip = selected_address['zip'].iloc[0]
 
 with st.form("my_form"):
-    name = st.text_input("Location Name", value=st.session_state.selected_name)
-    address = st.text_input("Address", value=st.session_state.selected_address)
-    city = st.text_input("City", value=st.session_state.selected_city)
-    state = st.text_input("State", value=st.session_state.selected_state)
-    zip = st.text_input("Zip", value=st.session_state.selected_zip)
+    if address_option:
+        name = st.text_input("Location Name", value=st.session_state.selected_name)
+        address = st.text_input("Address", value=st.session_state.selected_address)
+        city = st.text_input("City", value=st.session_state.selected_city)
+        state = st.text_input("State", value=st.session_state.selected_state)
+        zip = st.text_input("Zip", value=st.session_state.selected_zip)
     submitted = st.form_submit_button("Submit")
 
 if submitted:
