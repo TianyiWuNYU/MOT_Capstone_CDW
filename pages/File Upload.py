@@ -24,22 +24,23 @@ pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 with st.form("my_form"):
     address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist())
     if address_option:
-      selected_address = pickup_book[pickup_book['name'] == address_option]
-      address = selected_address['address'].iloc[0]
-      city = selected_address['city'].iloc[0]
-      state = selected_address['state'].iloc[0]
-      zip = selected_address['zip'].iloc[0]
+        selected_address = pickup_book[pickup_book['name'] == address_option]
+        address = selected_address['address'].iloc[0]
+        city = selected_address['city'].iloc[0]
+        state = selected_address['state'].iloc[0]
+        zip = selected_address['zip'].iloc[0]
     else:
-      address = st.text_input("Address")
-      city = st.text_input("City")
-      state = st.text_input("State")
-      zip = st.text_input("Zip")
+        address = st.text_input("Address")
+        city = st.text_input("City")
+        state = st.text_input("State")
+        zip = st.text_input("Zip")
     
     submitted = st.form_submit_button("submit")
-    if submitted:
-      with open('test.csv', 'a', newline='', encoding='utf-8') as f:
-          writer = csv.writer(f)
-          writer.writerow([address, city, state, zip])
-      st.success("Submit Success")
+
+if submitted:
+    with open('test.csv', 'a', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow([address, city, state, zip])
+        st.success("Submit Success")
 
 st.write("test dataset", load_test())
