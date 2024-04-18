@@ -30,9 +30,9 @@ if 'selected_zip' not in st.session_state:
 
 pickup_book = load_pickup_book()
 pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
+address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), on_change=lambda: update_add_field(address_option))
 
 with st.form("my_form"):
-    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), on_change=lambda: update_add_field(address_option))
     ln = st.text_input("Location Name", value=st.session_state.selected_name)
     add = st.text_input("Address", value=st.session_state.selected_address)
     ct = st.text_input("City", value=st.session_state.selected_city)
