@@ -21,9 +21,9 @@ def load_pickup_book():
 pickup_book = load_pickup_book()
 
 with st.form("my_form"):
-    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['name'].tolist())
+    address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['name','address'].tolist())
     if address_option:
-      selected_address = address_book[address_book['name'] == address_option]
+      selected_address = pickup_book[pickup_book['name'] == address_option]
       address = selected_address['address'].iloc[0]
       city = selected_address['city'].iloc[0]
       state = selected_address['state'].iloc[0]
