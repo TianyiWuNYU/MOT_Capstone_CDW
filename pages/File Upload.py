@@ -10,8 +10,8 @@ st.markdown(
     """
 )
 
-def load_test():
-    return pd.read_csv('data/test.csv')
+def load_data():
+    return pd.read_csv('data/template.csv')
 
 def load_pickup_book():
     return pd.read_csv('data/pickup_address_book.csv')
@@ -59,9 +59,9 @@ with st.form("my_form"):
     submitted = st.form_submit_button("Submit")
 
 if submitted:
-    with open('data/test.csv', 'a', newline='', encoding='utf-8') as f:
+    with open('data/template.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([name, address, city, state, zip])
         st.success("Submit Success")
 
-st.write("test dataset", load_test())
+st.write("Input Results", load_data())
