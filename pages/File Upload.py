@@ -38,7 +38,7 @@ test_option = st.selectbox('Choose Existing Address', [''] + pickup_book['displa
 def update_pickup(option):
     st.session_state.pickup = option
     if option:
-        selected_pickup = pickup_book[pickup_book['display'] == pickup_option]
+        selected_pickup = pickup_book[pickup_book['display'] == option]
         st.session_state.pickup_name = selected_pickup['name'].iloc[0]
         st.session_state.pickup_add = selected_pickup['address'].iloc[0]
         st.session_state.pickup_city = selected_pickup['city'].iloc[0]
