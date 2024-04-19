@@ -44,7 +44,7 @@ def update_pickup(option):
         st.session_state.pickup_city = selected_pickup['city'].iloc[0]
         st.session_state.pickup_state = selected_pickup['state'].iloc[0]
         st.session_state.pickup_zip = selected_pickup['zip'].iloc[0]
-        st.experimental_rerun()
+    st.experimental_rerun()
 
 if pickup_option != st.session_state.pickup:
     update_pickup(pickup_option)
