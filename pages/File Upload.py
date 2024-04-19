@@ -33,18 +33,18 @@ pickup_book = load_pickup_book()
 pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 
 pickup_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), on_change=lambda: update_pickup(pickup_option), key="pickup")
-test_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(),key="generator")
+test_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(), key="generator")
 
 def update_pickup(option):
     st.session_state.pickup = option
     if option:
-        selected_pickup = pickup_book[pickup_book['display'] == option]
+        selected_pickup = pickup_book[pickup_book['display'] == pickup_option]
         st.session_state.pickup_name = selected_pickup['name'].iloc[0]
         st.session_state.pickup_add = selected_pickup['address'].iloc[0]
         st.session_state.pickup_city = selected_pickup['city'].iloc[0]
         st.session_state.pickup_state = selected_pickup['state'].iloc[0]
         st.session_state.pickup_zip = selected_pickup['zip'].iloc[0]
-        ## st.experimental_rerun()
+        st.experimental_rerun()
 
 if pickup_option != st.session_state.pickup:
     update_pickup(pickup_option)
