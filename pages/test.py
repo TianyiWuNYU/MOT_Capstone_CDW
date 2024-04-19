@@ -12,8 +12,8 @@ def load_test():
 def load_pickup_book():
     return pd.read_csv('data/pickup_address_book.csv')
 
-if 'pickup' not in st.session_state:
-    st.session_state.pickup = ""
+if 'selected_pickup' not in st.session_state:
+    st.session_state.selected_pickup = ""
 if 'selected_name' not in st.session_state:
     st.session_state.selected_name = ""
 if 'selected_address' not in st.session_state:
@@ -31,7 +31,7 @@ address_option = st.selectbox('Choose Existing Address', [''] + pickup_book['dis
 test_option = st.selectbox('Choose Existing Address', [''] + pickup_book['display'].tolist(),key="generator")
 
 def update_add_field(option):
-    st.session_state.pickup = option
+    st.session_state.selected_pickup = option
     if option:
         selected_address = pickup_book[pickup_book['display'] == address_option]
         st.session_state.selected_name = selected_address['name'].iloc[0]
@@ -41,7 +41,7 @@ def update_add_field(option):
         st.session_state.selected_zip = selected_address['zip'].iloc[0]
         st.experimental_rerun()
 
-if address_option != st.session_state.pickup:
+if address_option != st.session_state.selected_pickup:
     update_add_field(address_option)
 
 with st.form("my_form"):
