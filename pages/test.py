@@ -41,7 +41,7 @@ def update_add_field(selected_option):
         st.session_state.pickup_zip = selected_address['zip'].iloc[0]
         st.experimental_rerun()
 
-if address_option != st.session_state.selected_option:
+if address_option != st.session_state.pickup:
     update_add_field(address_option)
 
 with st.form("my_form"):
