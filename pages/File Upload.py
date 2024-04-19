@@ -88,20 +88,20 @@ if gene_option != st.session_state.selected_gene:
 
 with st.form("my_form"):
     st.write("### Pickup Location")
-    pk_name = st.text_input("Location Name", value=st.session_state.pickup_name)
-    pk_add = st.text_input("Address", value=st.session_state.pickup_add)
-    pk_city = st.text_input("City", value=st.session_state.pickup_city)
-    pk_state = st.text_input("State", value=st.session_state.pickup_state)
-    pk_zip = st.text_input("Zip", value=st.session_state.pickup_zip)
-    pk_lat = st.text_input("Latitude", value=st.session_state.pickup_lat)
-    pk_lng = st.text_input("Longtitude", value=st.session_state.pickup_lng)
+    pk_name = st.text_input("Location Name", value=st.session_state.pickup_name, key="pkn")
+    pk_add = st.text_input("Address", value=st.session_state.pickup_add, key="pka")
+    pk_city = st.text_input("City", value=st.session_state.pickup_city, key="pkc")
+    pk_state = st.text_input("State", value=st.session_state.pickup_state, key="pks")
+    pk_zip = st.text_input("Zip", value=st.session_state.pickup_zip, key="pkz")
+    pk_lat = st.text_input("Latitude", value=st.session_state.pickup_lat, key="pkt")
+    pk_lng = st.text_input("Longtitude", value=st.session_state.pickup_lng, key="pkg")
 
     st.write("### Generator Location")
-    gn_name = st.text_input("Location Name", value=st.session_state.gene_name)
-    gn_add = st.text_input("Address", value=st.session_state.gene_add)
-    gn_city = st.text_input("City", value=st.session_state.gene_city)
-    gn_state = st.text_input("State", value=st.session_state.gene_state)
-    gn_zip = st.text_input("Zip", value=st.session_state.gene_zip)
+    gn_name = st.text_input("Location Name", value=st.session_state.gene_name, key="gnn")
+    gn_add = st.text_input("Address", value=st.session_state.gene_add, key="gna")
+    gn_city = st.text_input("City", value=st.session_state.gene_city, key="gnc")
+    gn_state = st.text_input("State", value=st.session_state.gene_state, key="gns")
+    gn_zip = st.text_input("Zip", value=st.session_state.gene_zip, key="gnz")
     
     submitted = st.form_submit_button("Submit")
 
