@@ -4,7 +4,7 @@ import pydeck as pdk
 
 st.title('DDC Mapping Program')
 
-file_url = 'https://raw.githubusercontent.com/bronzekillervan/ddc/main/cdw_csv_sample.csv'
+file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/blob/main/data/cdw_csv_sample.csv'
 
 def draw_routes(df):
     valid_routes = df.dropna(subset=['pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng'])
