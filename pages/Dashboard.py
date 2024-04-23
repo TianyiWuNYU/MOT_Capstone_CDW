@@ -39,7 +39,7 @@ def draw_routes(df):
         get_tilt=15,
         get_color=[255, 182, 193, 255], 
         pickable=True,
-        auto_highlight=True,
+        auto_highlight=False,
     )
 
     view_state = pdk.ViewState(
