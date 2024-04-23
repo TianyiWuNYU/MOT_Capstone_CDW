@@ -4,7 +4,7 @@ import pandas as pd
 def load_data_from_github(url):
     return pd.read_csv(url)
 
-github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/LF_caps.csv'
+github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_sample.csv'
 
 data = load_data_from_github(github_raw_url)
 
