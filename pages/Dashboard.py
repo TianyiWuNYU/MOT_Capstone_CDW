@@ -37,7 +37,7 @@ def draw_routes(df):
         get_target_position="to_coordinates",
         get_width=5,
         get_tilt=15,
-        get_color=[135, 206, 235, 100], 
+        get_color=[135, 100, 100, 100], 
         pickable=True,
         auto_highlight=True,
     )
