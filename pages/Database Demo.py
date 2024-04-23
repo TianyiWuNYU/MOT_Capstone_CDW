@@ -5,7 +5,7 @@ import pandas as pd
 def load_data_from_github(url):
     return pd.read_csv(url)
 
-github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_sample.csv'
+github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
 data = load_data_from_github(github_raw_url)
 
 small_table = data[['generator_name']].copy()
