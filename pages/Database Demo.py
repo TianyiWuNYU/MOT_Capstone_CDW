@@ -13,7 +13,7 @@ if len(data.columns) > 1:
     third_column_data['index'] = third_column_data.index
     st.dataframe(third_column_data)
     
-    selected_indices = st.multiselect("选择行索引", third_column_data['index'])
+    selected_indices = st.multiselect("Select an index", third_column_data['index'])
     for selected_index in selected_indices:
         st.write(data.loc[selected_index, :])
 
