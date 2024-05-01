@@ -1,38 +1,33 @@
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
-import requests
 
 # 设置页面标题
 st.title('DDC Mapping Program')
 
-# 从GitHub加载数据
+# 加载数据
 file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
+df = pd.read_csv(file_url)
 
-# 尝试加载数据
-try:
-    df = pd.read_csv(file_url)
-    st.write("Data loaded successfully!")
-except Exception as e:
-    st.error(f"Failed to load data: {e}")
+st.write("Data loaded successfully!")
 
-# 用户界面允许选择type_debris
-unique_debris_types = df['type_debris'].unique()
+# 用户界面允许选择type_debris，添加“All types”选项
+unique_debris_types = ['All types of debris'] + list(df['type_debris'].unique())
 selected_debris = st.selectbox('Select Type of Debris:', unique_debris_types)
 
-# 用户界面允许选择pickup_address
-unique_pickup_addresses = df['pickup_address'].unique()
+# 用户界面允许选择pickup_address，添加“All pickups”选项
+unique_pickup_addresses = ['All pickup addresses'] + list(df['pickup_address'].unique())
 selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_addresses)
 
-# 用户界面允许选择receiving_address
-unique_receiving_addresses = df['receiving_address'].unique()
+# 用户界面允许选择receiving_address，添加“All receiving addresses”选项
+unique_receiving_addresses = ['All receiving addresses'] + list(df['receiving_address'].unique())
 selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
 
-# 过滤数据
+# 过滤数据逻辑
 filtered_data = df[
-    (df['type_debris'] == selected_debris) &
-    (df['pickup_address'] == selected_pickup_address) &
-    (df['receiving_address'] == selected_receiving_address)
+    ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
+    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup addresses')) &
+    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
 ]
 
 def draw_routes(filtered_data):
@@ -79,5 +74,6 @@ def draw_routes(filtered_data):
 
 # 绘制路线图
 draw_routes(filtered_data)
+
 
 
