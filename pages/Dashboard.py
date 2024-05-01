@@ -18,7 +18,7 @@ selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_a
 unique_receiving_addresses = ['All receiving addresses'] + list(df['receiving_address'].unique())
 selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
 
-route_color = st.color_picker('Choose a route color', '#87CEEB')  # 默认为天蓝色
+route_color = st.color_picker('Choose a route color', '#87CEEB')  
 
 filtered_data = df[
     ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
