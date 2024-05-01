@@ -43,8 +43,7 @@ def draw_routes(filtered_data, route_color):
                         f"Waste Quantity: {row['waste_quantity']}<br>"
                         f"Pickup Name: {row['pickup_name']}<br>"
                         f"Pickup Address: {row['pickup_address']}<br>"
-                        f"Generator Name: {row['generator_name
-']}<br>"
+                        f"Generator Name: {row['generator_name']}<br>"
                         f"Generator Address: {row['generator_address']}"
             }
             for _, row in filtered_data.iterrows()
