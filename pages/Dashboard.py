@@ -1,13 +1,20 @@
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
+import requests
 
 # 设置页面标题
 st.title('DDC Mapping Program')
 
-# 加载数据
-file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_sample.csv'
-df = pd.read_csv(file_url)
+# 从GitHub加载数据
+file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
+
+# 尝试加载数据
+try:
+    df = pd.read_csv(file_url)
+    st.write("Data loaded successfully!")
+except Exception as e:
+    st.error(f"Failed to load data: {e}")
 
 # 用户界面允许选择type_debris
 unique_debris_types = df['type_debris'].unique()
@@ -51,7 +58,7 @@ def draw_routes(filtered_data):
             get_target_position="to_coordinates",
             get_width=5,
             get_tilt=15,
-            get_color=[135, 206, 235, 255],
+            get_color=[135, 206, 235, 255],  # 浅蓝色
             pickable=True,
             auto_highlight=True,
         )
