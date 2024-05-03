@@ -51,7 +51,8 @@ def draw_routes(filtered_data, route_color):
             get_target_position="to_coordinates",
             get_width=5,
             get_tilt=15,
-            get_color=color,  
+            get_source_color=color,
+            get_target_color=color,
             pickable=True,
             auto_highlight=True,
         )
