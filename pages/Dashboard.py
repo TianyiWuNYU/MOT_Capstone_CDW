@@ -51,14 +51,33 @@ def update_options():
 
     return debris_options, pickup_options, receiving_options
 
+# 获取下拉选项
+debris_options, pickup_options, receiving_options = update_options()
+
+# 创建选择器
+selected_debris = st.selectbox('Select Type of Debris:', debris_options)
+selected_pickup_address = st.selectbox('Select Pickup Address:', pickup_options)
+selected_receiving_address = st.selectbox('Select Receiving Address:', receiving_options)
+
+# 更新会话状态
+st.session_state.selected_debris = selected_debris
+st.session_state.selected_pickup_address = selected_pickup_address
+st.session_state.selected_receiving_address = selected_receiving_address
+
+# 过滤数据
+filtered_data = df[
+    ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
+    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup addresses')) &
+    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
+]
+
 # 绘图函数，使用 Pydeck 绘制
 def draw_routes(filtered_data, pickup_color, receiving_color):
-    # Placeholder for Pydeck map code
     st.pydeck_chart(pdk.Deck(
         map_style='mapbox://styles/mapbox/light-v9',
         initial_view_state=pdk.ViewState(
-            latitude=37.76,
-            longitude=-122.4,
+            latitude=37.76,  # 更改为适合你数据的纬度
+            longitude=-122.4,  # 更改为适合你数据的经度
             zoom=11,
             pitch=50,
         ),
@@ -78,4 +97,3 @@ def draw_routes(filtered_data, pickup_color, receiving_color):
 
 # 绘制路线图
 draw_routes(filtered_data, pickup_color, receiving_color)
-
