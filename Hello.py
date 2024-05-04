@@ -22,7 +22,7 @@ def load_custom_css():
   st.markdown(css, unsafe_allow_html=True)
 
 def run():
-    st.set_page_config(
+  st.set_page_config(
         page_title="NYU-MOT-CDW",
         page_icon="👋",
     )
