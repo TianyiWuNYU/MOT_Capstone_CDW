@@ -9,33 +9,40 @@ df = pd.read_csv(file_url)
 
 st.write("Data loaded successfully!")
 
-# 使用 list 转换 unique() 的结果并进行排序
-unique_debris_types = ['All types of debris'] + sorted(list(df['type_debris'].unique()))
-selected_debris = st.selectbox('Select Type of Debris:', unique_debris_types)
+def get_filtered_options(df, col, skip_val):
+    if skip_val:
+        return df[col].unique()
+    else:
+        return ['All'] + sorted(df[col].unique())
 
-unique_pickup_addresses = ['All pickup addresses'] + sorted(list(df['pickup_address'].unique()))
-selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_addresses)
+selected_debris = st.selectbox(
+    'Select Type of Debris:',
+    get_filtered_options(df, 'type_debris', False),
+    index=0
+)
 
-unique_receiving_addresses = ['All receiving addresses'] + sorted(list(df['receiving_address'].unique()))
-selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
+selected_pickup_address = st.selectbox(
+    'Select Pickup Address:',
+    get_filtered_options(df[df['type_debris'].isin([selected_debris] if selected_debris != 'All' else df['type_debris'].unique())], 'pickup_address', selected_debris != 'All'),
+    index=0
+)
 
-route_color = st.color_picker('Choose a route color', '#87CEEB')
+selected_receiving_address = st.selectbox(
+    'Select Receiving Address:',
+    get_filtered_options(df[df['type_debris'].isin([selected_debris] if selected_debris != 'All' else df['type_debris'].unique()) & df['pickup_address'].isin([selected_pickup_address] if selected_pickup_address != 'All' else df['pickup_address'].unique())], 'receiving_address', selected_debris != 'All' or selected_pickup_address != 'All'),
+    index=0
+)
 
-# 根据当前选择更新数据
-def update_selectors():
-    current_data = df.copy()
-    if selected_debris != 'All types of debris':
-        current_data = current_data[current_data['type_debris'] == selected_debris]
-    if selected_pickup_address != 'All pickup addresses':
-        current_data = current_data[current_data['pickup_address'] == selected_pickup_address]
-    if selected_receiving_address != 'All receiving addresses':
-        current_data = current_data[current_data['receiving_address'] == selected_receiving_address]
-    return current_data
+route_color = st.color_picker('Choose a route color', '#0000FF')
 
-filtered_data = update_selectors()
+filtered_data = df[
+    ((df['type_debris'] == selected_debris) | (selected_debris == 'All')) &
+    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All')) &
+    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All'))
+]
 
-def draw_routes(filtered_data, route_color):
-    if not filtered_data.empty:
+def draw_routes(data, color):
+    if not data.empty:
         routes = [
             {
                 "from_coordinates": [row['pickup_lng'], row['pickup_lat']],
@@ -47,10 +54,10 @@ def draw_routes(filtered_data, route_color):
                         f"Generator Name: {row['generator_name']}<br>"
                         f"Generator Address: {row['generator_address']}"
             }
-            for _, row in filtered_data.iterrows()
+            for _, row in data.iterrows()
         ]
 
-        color = [int(route_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]
+        color = [int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]  # 将HEX颜色转换为RGBA
 
         layer = pdk.Layer(
             "ArcLayer",
@@ -65,8 +72,8 @@ def draw_routes(filtered_data, route_color):
         )
 
         view_state = pdk.ViewState(
-            latitude=filtered_data['pickup_lat'].mean(),
-            longitude=filtered_data['pickup_lng'].mean(),
+            latitude=data['pickup_lat'].mean(),
+            longitude=data['pickup_lng'].mean(),
             zoom=6
         )
 
