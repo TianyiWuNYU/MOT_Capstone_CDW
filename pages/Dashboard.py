@@ -33,15 +33,13 @@ def update_options():
 
     # 确保 debris_types 是一个列表
     debris_types = list(current_df['type_debris'].unique())
-
-    # 创建选项列表，并确保类型正确
-    debris_options = ['All types of debris'] + sorted(debris_types) if debris_types else ['All types of debris']
+    debris_options = ['All types of debris'] + debris_types if debris_types else ['All types of debris']
 
     pickup_addresses = list(current_df['pickup_address'].unique())
-    pickup_options = ['All pickup addresses'] + sorted(pickup_addresses) if pickup_addresses else ['All pickup addresses']
+    pickup_options = ['All pickup addresses'] + pickup_addresses if pickup_addresses else ['All pickup addresses']
 
     receiving_addresses = list(current_df['receiving_address'].unique())
-    receiving_options = ['All receiving addresses'] + sorted(receiving_addresses) if receiving_addresses else ['All receiving_addresses']
+    receiving_options = ['All receiving addresses'] + receiving_addresses if receiving_addresses else ['All receiving_addresses']
 
     return debris_options, pickup_options, receiving_options
 
@@ -91,3 +89,4 @@ def draw_routes(filtered_data, pickup_color, receiving_color):
 
 # 绘制路线图
 draw_routes(filtered_data, pickup_color, receiving_color)
+
