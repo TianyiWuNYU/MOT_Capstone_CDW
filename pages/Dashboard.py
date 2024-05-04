@@ -31,23 +31,17 @@ def update_options():
     if st.session_state.selected_receiving_address != 'All receiving addresses':
         current_df = current_df[current_df['receiving_address'] == st.session_state.selected_receiving_address]
 
-    debris_types = current_df['type_debris'].unique().tolist()
-    if debris_types:  # 确保列表不为空
-        debris_options = ['All types of debris'] + sorted(debris_types)
-    else:
-        debris_options = ['All types of debris']  # 如果列表为空，则只有默认选项
+    # 确保 debris_types 是一个列表
+    debris_types = list(current_df['type_debris'].unique())
 
-    pickup_addresses = current_df['pickup_address'].unique().tolist()
-    if pickup_addresses:
-        pickup_options = ['All pickup addresses'] + sorted(pickup_addresses)
-    else:
-        pickup_options = ['All pickup addresses']
+    # 创建选项列表，并确保类型正确
+    debris_options = ['All types of debris'] + sorted(debris_types) if debris_types else ['All types of debris']
 
-    receiving_addresses = current_df['receiving_address'].unique().tolist()
-    if receiving_addresses:
-        receiving_options = ['All receiving addresses'] + sorted(receiving_addresses)
-    else:
-        receiving_options = ['All receiving_addresses']
+    pickup_addresses = list(current_df['pickup_address'].unique())
+    pickup_options = ['All pickup addresses'] + sorted(pickup_addresses) if pickup_addresses else ['All pickup addresses']
+
+    receiving_addresses = list(current_df['receiving_address'].unique())
+    receiving_options = ['All receiving addresses'] + sorted(receiving_addresses) if receiving_addresses else ['All receiving_addresses']
 
     return debris_options, pickup_options, receiving_options
 
@@ -67,8 +61,8 @@ st.session_state.selected_receiving_address = selected_receiving_address
 # 过滤数据
 filtered_data = df[
     ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
-    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup addresses')) &
-    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
+    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup_addresses')) &
+    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving_addresses'))
 ]
 
 # 绘图函数，使用 Pydeck 绘制
