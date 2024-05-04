@@ -7,8 +7,8 @@ import pandas as pd
 LOGGER = get_logger(__name__)
 
 def load_custom_css():
-    css = """
-    <style>
+  css = """
+  <style>
         /* Target the grid layout of Streamlit columns directly */
         .st-cd {
             gap: 20px; /* Adjust the gap between columns */
