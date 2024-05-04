@@ -4,13 +4,18 @@ import pydeck as pdk
 
 st.title('DDC Mapping Program')
 
+# 加载数据
 file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
 df = pd.read_csv(file_url)
 
+# 确保列是字符串类型，以避免比较错误
+df['type_debris'] = df['type_debris'].astype(str)
+df['pickup_address'] = df['pickup_address'].astype(str)
+df['receiving_address'] = df['receiving_address'].astype(str)
+
 st.write("Data loaded successfully!")
 
-# 动态更新下拉选项的功能
-def update_options(selected_debris, selected_pickup_address, selected_receiving_address):
+def get_filtered_options(df, selected_debris, selected_pickup_address, selected_receiving_address):
     filtered_df = df.copy()
     if selected_debris != 'All types of debris':
         filtered_df = filtered_df[filtered_df['type_debris'] == selected_debris]
@@ -25,36 +30,24 @@ def update_options(selected_debris, selected_pickup_address, selected_receiving_
 
     return debris_options, pickup_options, receiving_options
 
-# 默认选项
-selected_debris = 'All types of debris'
-selected_pickup_address = 'All pickup addresses'
-selected_receiving_address = 'All receiving addresses'
+# 初始化选项
+selected_debris = st.selectbox('Select Type of Debris:', ['All types of debris'] + sorted(df['type_debris'].unique()))
+selected_pickup_address = st.selectbox('Select Pickup Address:', ['All pickup addresses'] + sorted(df['pickup_address'].unique()))
+selected_receiving_address = st.selectbox('Select Receiving Address:', ['All receiving addresses'] + sorted(df['receiving_address'].unique()))
 
-debris_options, pickup_options, receiving_options = update_options(selected_debris, selected_pickup_address, selected_receiving_address)
+# 更新选项
+debris_options, pickup_options, receiving_options = get_filtered_options(df, selected_debris, selected_pickup_address, selected_receiving_address)
 
-selected_debris = st.selectbox('Select Type of Debris:', debris_options)
-selected_pickup_address = st.selectbox('Select Pickup Address:', pickup_options)
-selected_receiving_address = st.selectbox('Select Receiving Address:', receiving_options)
+# 显示更新后的选择器
+selected_debris = st.selectbox('Select Type of Debris (Updated):', debris_options)
+selected_pickup_address = st.selectbox('Select Pickup Address (Updated):', pickup_options)
+selected_receiving_address = st.selectbox('Select Receiving Address (Updated):', receiving_options)
 
-# 用户选择颜色
-pickup_color = st.color_picker('Choose a color for pickup locations', '#FF6347')
-receiving_color = st.color_picker('Choose a color for receiving locations', '#4682B4')
-
+# 显示路径绘制
+route_color = st.color_picker('Choose a route color', '#87CEEB')
 filtered_data = df[
     ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
     ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup addresses')) &
     ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
 ]
-
-# 确保筛选逻辑后再次更新选项，以响应可能的变化
-_, pickup_options, receiving_options = update_options(selected_debris, selected_pickup_address, selected_receiving_address)
-
-def draw_routes(data):
-    if not data.empty:
-        # 路径绘制逻辑
-        pass  # 使用pydeck绘制逻辑
-
-draw_routes(filtered_data)
-
-
 
