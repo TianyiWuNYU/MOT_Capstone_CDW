@@ -31,27 +31,18 @@ def update_options():
     if st.session_state.selected_receiving_address != 'All receiving addresses':
         current_df = current_df[current_df['receiving_address'] == st.session_state.selected_receiving_address]
 
-    # 确保 debris_types 是一个列表
-    debris_types = list(current_df['type_debris'].unique())
-    debris_options = ['All types of debris'] + debris_types if debris_types else ['All types of debris']
-
-    pickup_addresses = list(current_df['pickup_address'].unique())
-    pickup_options = ['All pickup addresses'] + pickup_addresses if pickup_addresses else ['All pickup addresses']
-
-    receiving_addresses = list(current_df['receiving_address'].unique())
-    receiving_options = ['All receiving addresses'] + receiving_addresses if receiving_addresses else ['All receiving_addresses']
+    debris_options = ['All types of debris'] + sorted(current_df['type_debris'].unique().tolist())
+    pickup_options = ['All pickup addresses'] + sorted(current_df['pickup_address'].unique().tolist())
+    receiving_options = ['All receiving addresses'] + sorted(current_df['receiving_address'].unique().tolist())
 
     return debris_options, pickup_options, receiving_options
 
-# 获取下拉选项
 debris_options, pickup_options, receiving_options = update_options()
 
-# 创建选择器
 selected_debris = st.selectbox('Select Type of Debris:', debris_options)
 selected_pickup_address = st.selectbox('Select Pickup Address:', pickup_options)
 selected_receiving_address = st.selectbox('Select Receiving Address:', receiving_options)
 
-# 更新会话状态
 st.session_state.selected_debris = selected_debris
 st.session_state.selected_pickup_address = selected_pickup_address
 st.session_state.selected_receiving_address = selected_receiving_address
@@ -59,34 +50,33 @@ st.session_state.selected_receiving_address = selected_receiving_address
 # 过滤数据
 filtered_data = df[
     ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
-    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup_addresses')) &
-    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving_addresses'))
+    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup addresses')) &
+    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
 ]
 
-# 绘图函数，使用 Pydeck 绘制
 def draw_routes(filtered_data, pickup_color, receiving_color):
-    st.pydeck_chart(pdk.Deck(
-        map_style='mapbox://styles/mapbox/light-v9',
-        initial_view_state=pdk.ViewState(
-            latitude=37.76,  # 更改为适合你数据的纬度
-            longitude=-122.4,  # 更改为适合你数据的经度
-            zoom=11,
+    if not filtered_data.empty:
+        view_state = pdk.ViewState(
+            latitude=filtered_data['latitude'].mean(),  # Adjust this as per your data
+            longitude=filtered_data['longitude'].mean(),  # Adjust this as per your data
+            zoom=10,
             pitch=50,
-        ),
-        layers=[
-            pdk.Layer(
-               'HexagonLayer',
-               data=filtered_data,
-               get_position='[longitude, latitude]',
-               radius=200,
-               elevation_scale=4,
-               elevation_range=[0, 1000],
-               pickable=True,
-               extruded=True,
-            ),
-        ],
-    ))
+        )
 
-# 绘制路线图
+        layer = pdk.Layer(
+            'LineLayer',
+            data=filtered_data,
+            get_source_position='[longitude, latitude]',
+            get_target_position='[end_longitude, end_latitude]',  # Ensure your data has these fields
+            get_color='[200, 30, 0, 160]',
+            get_width=5,
+        )
+
+        st.pydeck_chart(pdk.Deck(
+            initial_view_state=view_state,
+            layers=[layer],
+            map_style='mapbox://styles/mapbox/light-v9'
+        ))
+
 draw_routes(filtered_data, pickup_color, receiving_color)
 
