@@ -9,54 +9,30 @@ df = pd.read_csv(file_url)
 
 st.write("Data loaded successfully!")
 
-def update_selectors(debris_type, pickup_address, receiving_address):
-    if debris_type != 'All types of debris':
-        df_filtered = df[df['type_debris'] == debris_type]
-    else:
-        df_filtered = df
+# 使用 list 转换 unique() 的结果并进行排序
+unique_debris_types = ['All types of debris'] + sorted(list(df['type_debris'].unique()))
+selected_debris = st.selectbox('Select Type of Debris:', unique_debris_types)
 
-    if pickup_address != 'All pickup addresses':
-        df_filtered = df_filtered[df_filtered['pickup_address'] == pickup_address]
+unique_pickup_addresses = ['All pickup addresses'] + sorted(list(df['pickup_address'].unique()))
+selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_addresses)
 
-    if receiving_address != 'All receiving addresses':
-        df_filtered = df_filtered[df_filtered['receiving_address'] == receiving_address]
+unique_receiving_addresses = ['All receiving addresses'] + sorted(list(df['receiving_address'].unique()))
+selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
 
-    return df_filtered
-
-# Initialize session states if not already set
-if 'selected_debris' not in st.session_state:
-    st.session_state['selected_debris'] = 'All types of debris'
-if 'selected_pickup' not in st.session_state:
-    st.session_state['selected_pickup'] = 'All pickup addresses'
-if 'selected_receiving' not in st.session_state:
-    st.session_state['selected_receiving'] = 'All receiving addresses'
-
-# Selector for type of debris
-unique_debris_types = ['All types of debris'] + sorted(df['type_debris'].unique())
-selected_debris = st.selectbox('Select Type of Debris:', unique_debris_types, index=unique_debris_types.index(st.session_state['selected_debris']))
-st.session_state['selected_debris'] = selected_debris
-
-# Update the data based on the selected debris type
-df_updated = update_selectors(selected_debris, st.session_state['selected_pickup'], st.session_state['selected_receiving'])
-
-# Selector for pickup address
-unique_pickup_addresses = ['All pickup addresses'] + sorted(df_updated['pickup_address'].unique())
-selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_addresses, index=unique_pickup_addresses.index(st.session_state['selected_pickup']))
-st.session_state['selected_pickup'] = selected_pickup_address
-
-# Update the data based on the selected pickup address
-df_updated = update_selectors(selected_debris, selected_pickup_address, st.session_state['selected_receiving'])
-
-# Selector for receiving address
-unique_receiving_addresses = ['All receiving addresses'] + sorted(df_updated['receiving_address'].unique())
-selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses, index=unique_receiving_addresses.index(st.session_state['selected_receiving']))
-st.session_state['selected_receiving'] = selected_receiving_address
-
-# Final update based on all selections
-filtered_data = update_selectors(selected_debris, selected_pickup_address, selected_receiving_address)
-
-# Color picker for routes
 route_color = st.color_picker('Choose a route color', '#87CEEB')
+
+# 根据当前选择更新数据
+def update_selectors():
+    current_data = df.copy()
+    if selected_debris != 'All types of debris':
+        current_data = current_data[current_data['type_debris'] == selected_debris]
+    if selected_pickup_address != 'All pickup addresses':
+        current_data = current_data[current_data['pickup_address'] == selected_pickup_address]
+    if selected_receiving_address != 'All receiving addresses':
+        current_data = current_data[current_data['receiving_address'] == selected_receiving_address]
+    return current_data
+
+filtered_data = update_selectors()
 
 def draw_routes(filtered_data, route_color):
     if not filtered_data.empty:
@@ -74,7 +50,7 @@ def draw_routes(filtered_data, route_color):
             for _, row in filtered_data.iterrows()
         ]
 
-        color = [int(route_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]  # Convert HEX to RGBA
+        color = [int(route_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]
 
         layer = pdk.Layer(
             "ArcLayer",
@@ -103,6 +79,5 @@ def draw_routes(filtered_data, route_color):
     else:
         st.error('No routes found for the selected options.')
 
-# Drawing routes
 draw_routes(filtered_data, route_color)
 
