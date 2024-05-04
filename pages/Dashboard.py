@@ -4,19 +4,39 @@ import pydeck as pdk
 
 st.title('DDC Mapping Program')
 
+# 加载数据
 file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
 df = pd.read_csv(file_url)
-
 st.write("Data loaded successfully!")
 
-unique_debris_types = ['All types of debris'] + list(df['type_debris'].unique())
-selected_debris = st.selectbox('Select Type of Debris:', unique_debris_types)
+# 初始化session_state，如果没有初始化过
+if 'selected_debris' not in st.session_state:
+    st.session_state['selected_debris'] = 'All types of debris'
+if 'selected_pickup' not in st.session_state:
+    st.session_state['selected_pickup'] = 'All pickup addresses'
+if 'selected_receiving' not in st.session_state:
+    st.session_state['selected_receiving'] = 'All receiving addresses'
 
-unique_pickup_addresses = ['All pickup addresses'] + list(df['pickup_address'].unique())
-selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_addresses)
+# 用来根据选择更新选项的函数
+def update_options():
+    debris_mask = (df['type_debris'] == st.session_state['selected_debris']) | (st.session_state['selected_debris'] == 'All types of debris')
+    pickup_mask = (df['pickup_address'] == st.session_state['selected_pickup']) | (st.session_state['selected_pickup'] == 'All pickup addresses')
+    receiving_mask = (df['receiving_address'] == st.session_state['selected_receiving']) | (st.session_state['selected_receiving'] == 'All receiving addresses')
+    filtered_df = df[debris_mask & pickup_mask & receiving_mask]
+    
+    unique_debris_types = ['All types of debris'] + sorted(filtered_df['type_debris'].unique().tolist())
+    unique_pickup_addresses = ['All pickup addresses'] + sorted(filtered_df['pickup_address'].unique().tolist())
+    unique_receiving_addresses = ['All receiving addresses'] + sorted(filtered_df['receiving_address'].unique().tolist())
+    
+    return unique_debris_types, unique_pickup_addresses, unique_receiving_addresses
 
-unique_receiving_addresses = ['All receiving addresses'] + list(df['receiving_address'].unique())
-selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
+# 选择过滤器
+def on_change():
+    st.session_state['update'] = True
+
+selected_debris = st.selectbox('Select Type of Debris:', update_options()[0], on_change=on_change, key='selected_debris')
+selected_pickup_address = st.selectbox('Select Pickup Address:', update_options()[1], on_change=on_change, key='selected_pickup')
+selected_receiving_address = st.selectbox('Select Receiving Address:', update_options()[2], on_change=on_change, key='selected_receiving')
 
 pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
 receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')  
@@ -27,6 +47,7 @@ filtered_data = df[
     ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
 ]
 
+# 绘制路径的函数
 def draw_routes(filtered_data, pickup_color, receiving_color):
     if not filtered_data.empty:
         routes = [
