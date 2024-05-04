@@ -79,4 +79,3 @@ def draw_routes(filtered_data, pickup_color, receiving_color):
         ))
 
 draw_routes(filtered_data, pickup_color, receiving_color)
-
