@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 
 def load_custom_css():
     css = """
@@ -35,10 +34,10 @@ def run():
 
     st.title('About Us')
     team_members = [
-        {"name": "Yanfeng Xu", "role": "JIRA", "linkedin": "https://www.linkedin.com/in/yanfeng-xu-734698239/", "image_path": "xu.jpg"},
-        {"name": "Tianyi Wu", "role": "Email Communication", "linkedin": "https://www.linkedin.com/in/tianyi-wu-b558a51a3/", "image_path": "yi.jpg"},
-        {"name": "Ruoan Ni", "role": "Meeting Notes", "linkedin": "https://www.linkedin.com/in/ruoan-ni-97815424b/", "image_path": "mao.jpg"},
-        {"name": "Rui Xue", "role": "Meeting Moderator", "linkedin": "https://www.linkedin.com/in/rui-xue-b854731a4/", "image_path": "rui.jpg"}
+        {"name": "Yanfeng Xu", "role": "JIRA", "linkedin": "https://www.linkedin.com/in/yanfeng-xu-734698239/", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/dafd981f824bd141907fffc9e97830b.jpg"},
+        {"name": "Tianyi Wu", "role": "Email Communication", "linkedin": "https://www.linkedin.com/in/tianyi-wu-b558a51a3/", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/7fdac96ee1bacd291591efe1155f5dd.jpg"},
+        {"name": "Ruoan Ni", "role": "Meeting Notes", "linkedin": "https://www.linkedin.com/in/ruoan-ni-97815424b/", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/8720019c766d7e9d3c85f13aa935398.jpg"},
+        {"name": "Rui Xue", "role": "Meeting Moderator", "linkedin": "https://www.linkedin.com/in/rui-xue-b854731a4/", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/27d8bbc6a5cd97de219a03a26ec8cb6.jpg"}
     ]
     
     cols = st.columns(4)
