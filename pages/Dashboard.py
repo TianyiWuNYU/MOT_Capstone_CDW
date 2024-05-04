@@ -18,7 +18,8 @@ selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_a
 unique_receiving_addresses = ['All receiving addresses'] + list(df['receiving_address'].unique())
 selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
 
-route_color = st.color_picker('Choose a route color', '#87CEEB')  
+pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
+receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')  
 
 filtered_data = df[
     ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
@@ -26,7 +27,7 @@ filtered_data = df[
     ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
 ]
 
-def draw_routes(filtered_data, route_color):
+def draw_routes(filtered_data, pickup_color, receiving_color):
     if not filtered_data.empty:
         routes = [
             {
@@ -42,7 +43,8 @@ def draw_routes(filtered_data, route_color):
             for _, row in filtered_data.iterrows()
         ]
 
-        color = [int(route_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]  # 将HEX颜色转换为RGBA
+        pickup_color_rgba = [int(pickup_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]
+        receiving_color_rgba = [int(receiving_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]
 
         layer = pdk.Layer(
             "ArcLayer",
@@ -51,8 +53,8 @@ def draw_routes(filtered_data, route_color):
             get_target_position="to_coordinates",
             get_width=5,
             get_tilt=15,
-            get_source_color=color,
-            get_target_color=color,
+            get_source_color=pickup_color_rgba,
+            get_target_color=receiving_color_rgba,
             pickable=True,
             auto_highlight=True,
         )
@@ -72,5 +74,4 @@ def draw_routes(filtered_data, route_color):
     else:
         st.error('No routes found for the selected options.')
 
-draw_routes(filtered_data, route_color)
-
+draw_routes(filtered_data, pickup_color, receiving_color)
