@@ -19,7 +19,7 @@ def load_custom_css():
         }
     </style>
     """
-    st.markdown(css, unsafe_allow_html=True)
+  st.markdown(css, unsafe_allow_html=True)
 
 def run():
     st.set_page_config(
