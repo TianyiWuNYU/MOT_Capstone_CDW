@@ -56,10 +56,30 @@ filtered_data = df[
     ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
 ]
 
-# 绘图函数，保持不变
+# 绘图函数，使用 Pydeck 绘制
 def draw_routes(filtered_data, pickup_color, receiving_color):
-    # 类似之前的实现
-    # ...
+    # Placeholder for Pydeck map code
+    st.pydeck_chart(pdk.Deck(
+        map_style='mapbox://styles/mapbox/light-v9',
+        initial_view_state=pdk.ViewState(
+            latitude=37.76,
+            longitude=-122.4,
+            zoom=11,
+            pitch=50,
+        ),
+        layers=[
+            pdk.Layer(
+               'HexagonLayer',
+               data=filtered_data,
+               get_position='[longitude, latitude]',
+               radius=200,
+               elevation_scale=4,
+               elevation_range=[0, 1000],
+               pickable=True,
+               extruded=True,
+            ),
+        ],
+    ))
 
 # 绘制路线图
 draw_routes(filtered_data, pickup_color, receiving_color)
