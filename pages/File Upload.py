@@ -4,11 +4,9 @@ import csv
 
 st.write("# Data Input")
 
-st.markdown(
-    """
-    **This page is still under construction, and now we need the dataset files uploaded. more features are coming soon.**
-    """
-)
+st.markdown("""
+**This page is still under construction, and now we need the dataset files uploaded. More features are coming soon.**
+""")
 
 def load_data():
     return pd.read_csv('data/template.csv')
@@ -19,96 +17,43 @@ def load_pickup_book():
 def load_gene_book():
     return pd.read_csv('data/generator_address_book.csv')
 
-if 'selected_pickup' not in st.session_state:
-    st.session_state.selected_pickup = ""
-if 'pickup_name' not in st.session_state:
-    st.session_state.pickup_name = ""
-if 'pickup_add' not in st.session_state:
-    st.session_state.pickup_add = ""
-if 'pickup_state' not in st.session_state:
-    st.session_state.pickup_state = ""
-if 'pickup_city' not in st.session_state:
-    st.session_state.pickup_city = ""
-if 'pickup_zip' not in st.session_state:
-    st.session_state.pickup_zip = ""
-if 'pickup_lat' not in st.session_state:
-    st.session_state.pickup_lat = ""
-if 'pickup_lng' not in st.session_state:
-    st.session_state.pickup_lng = ""
-
-if 'selected_gene' not in st.session_state:
-    st.session_state.selected_gene = ""
-if 'gene_name' not in st.session_state:
-    st.session_state.gene_name = ""
-if 'gene_add' not in st.session_state:
-    st.session_state.gene_add = ""
-if 'gene_state' not in st.session_state:
-    st.session_state.gene_state = ""
-if 'gene_city' not in st.session_state:
-    st.session_state.gene_city = ""
-if 'gene_zip' not in st.session_state:
-    st.session_state.gene_zip = ""
-
-
 pickup_book = load_pickup_book()
 pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
+pickup_option = st.selectbox('Choose Existing Pickup Location', [''] + pickup_book['display'].tolist())
+generator_book = load_gene_book()
+generator_book['display'] = generator_book['name'] + ' - ' + generator_book['address']
+generator_option = st.selectbox('Choose Existing Generator Location', [''] + generator_book['display'].tolist())
 
-pickup_option = st.selectbox('Choose Existing Pickup Location', [''] + pickup_book['display'].tolist(), on_change=lambda: update_pickup(pickup_option), key="pickup")
-gene_option = st.selectbox('Choose Existing Generator Location', [''] + pickup_book['display'].tolist(), on_change=lambda: update_gene(gene_option), key="generator")
-
-def update_pickup(option):
-    st.session_state.selected_pickup = option
-    if option:
-        selected_pickup = pickup_book[pickup_book['display'] == option]
-        st.session_state.pickup_name = selected_pickup['name'].iloc[0]
-        st.session_state.pickup_add = selected_pickup['address'].iloc[0]
-        st.session_state.pickup_city = selected_pickup['city'].iloc[0]
-        st.session_state.pickup_state = selected_pickup['state'].iloc[0]
-        st.session_state.pickup_zip = selected_pickup['zip'].iloc[0]
-        st.session_state.pickup_lat = selected_pickup['lat'].iloc[0]
-        st.session_state.pickup_lng = selected_pickup['lng'].iloc[0]
-    st.experimental_rerun()
-
-def update_gene(option):
-    st.session_state.selected_gene = option
-    if option:
-        selected_gene = pickup_book[pickup_book['display'] == option]
-        st.session_state.gene_name = selected_gene['name'].iloc[0]
-        st.session_state.gene_add = selected_gene['address'].iloc[0]
-        st.session_state.gene_city = selected_gene['city'].iloc[0]
-        st.session_state.gene_state = selected_gene['state'].iloc[0]
-        st.session_state.gene_zip = selected_gene['zip'].iloc[0]
-    st.experimental_rerun()
-
-if pickup_option != st.session_state.selected_pickup:
-    update_pickup(pickup_option)
-
-if gene_option != st.session_state.selected_gene:
-    update_gene(gene_option)
-
-with st.form("my_form"):
+with st.form("data_entry_form"):
     st.write("### Pickup Location")
-    pk_name = st.text_input("Location Name", value=st.session_state.pickup_name, key="pkn")
-    pk_add = st.text_input("Address", value=st.session_state.pickup_add, key="pka")
-    pk_city = st.text_input("City", value=st.session_state.pickup_city, key="pkc")
-    pk_state = st.text_input("State", value=st.session_state.pickup_state, key="pks")
-    pk_zip = st.text_input("Zip", value=st.session_state.pickup_zip, key="pkz")
-    pk_lat = st.text_input("Latitude", value=st.session_state.pickup_lat, key="pkt")
-    pk_lng = st.text_input("Longtitude", value=st.session_state.pickup_lng, key="pkg")
+    pk_name = st.text_input("Location Name", value="")
+    pk_add = st.text_input("Address", value="")
+    pk_city = st.text_input("City", value="")
+    pk_state = st.text_input("State", value="")
+    pk_zip = st.text_input("Zip", value="")
+    pk_lat = st.text_input("Latitude", value="")
+    pk_lng = st.text_input("Longitude", value="")
 
     st.write("### Generator Location")
-    gn_name = st.text_input("Location Name", value=st.session_state.gene_name, key="gnn")
-    gn_add = st.text_input("Address", value=st.session_state.gene_add, key="gna")
-    gn_city = st.text_input("City", value=st.session_state.gene_city, key="gnc")
-    gn_state = st.text_input("State", value=st.session_state.gene_state, key="gns")
-    gn_zip = st.text_input("Zip", value=st.session_state.gene_zip, key="gnz")
-    
+    gn_name = st.text_input("Location Name (Generator)", value="")
+    gn_add = st.text_input("Address (Generator)", value="")
+    gn_city = st.text_input("City (Generator)", value="")
+    gn_state = st.text_input("State (Generator)", value="")
+    gn_zip = st.text_input("Zip (Generator)", value="")
+
+    st.write("### Waste Details")
+    type_debris = st.text_input("Type of Debris", value="")
+    waste_quantity = st.text_input("Waste Quantity", value="")
+    transporter_name = st.text_input("Transporter Name", value="")
+
     submitted = st.form_submit_button("Submit")
 
 if submitted:
+    new_data = [pk_name, pk_add, pk_city, pk_state, pk_zip, pk_lat, pk_lng, gn_name, gn_add, gn_city, gn_state, gn_zip, type_debris, waste_quantity, transporter_name]
     with open('data/template.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow([pk_name, pk_add, pk_city, pk_state, pk_zip, pk_lat, pk_lng, gn_name, gn_add, gn_city, gn_state, gn_zip])
-        st.success("Submit Success")
+        writer.writerow(new_data)
+        st.success("Data submitted successfully!")
 
 st.write("### Input Results", load_data())
+
