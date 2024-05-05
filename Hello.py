@@ -67,7 +67,7 @@ def run():
     
     This study was supported and assisted by many people, and we would like to express our group's sincere gratitude. 
     
-    First and foremost, I would like to extend a special thanks to our sponsor, **Terri C. Matthews**, who patiently provided thegroup with expert guidance on the project and offered invaluable suggestions. Her responses and advice were crucial in shaping the project's direction.
+    First and foremost, I would like to extend a special thanks toour sponsor, **Terri C. Matthews**, who patiently provided the group with expert guidance on the project and offered invaluable suggestions. Her patient responses and forward-thinking advice were critical safeguards that significantly influenced the outcome of our project.
 
     Secondly, thanks to **Professor Christopher Policastro** for his instrumental guidance and expertise which helped us tackle numerous challenges, enhancing our project's capabilities.
 
