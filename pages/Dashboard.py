@@ -4,46 +4,41 @@ import pydeck as pdk
 
 st.title('DDC Mapping Program')
 
+# Load and cache data
+@st.cache
+def load_data(url):
+    return pd.read_csv(url)
+
 file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
-df = pd.read_csv(file_url)
+df = load_data(file_url)
 
 st.write("Data loaded successfully!")
 
-# Helper function to create filter lists with default option
-def create_filter_list(column_name):
-    return ['All'] + sorted(df[column_name].dropna().unique().tolist())
+# Initialize selections
+selected_debris = st.selectbox('Select Type of Debris:', ['All types of debris'] + sorted(df['type_debris'].unique().tolist()))
+selected_pickup_address = st.selectbox('Select Pickup Address:', ['All pickup addresses'] + sorted(df['pickup_address'].unique().tolist()))
+selected_receiving_address = st.selectbox('Select Receiving Address:', ['All receiving addresses'] + sorted(df['receiving_address'].unique().tolist()))
 
-# Use helper function to dynamically update the lists based on selections
-def get_filtered_data():
-    debris_filter = create_filter_list('type_debris')
-    pickup_filter = create_filter_list('pickup_address')
-    receiving_filter = create_filter_list('receiving_address')
+# Dynamically filter data
+def filter_data(df, debris, pickup, receiving):
+    filtered = df.copy()
+    if debris != 'All types of debris':
+        filtered = filtered[filtered['type_debris'] == debris]
+    if pickup != 'All pickup addresses':
+        filtered = filtered[filtered['pickup_address'] == pickup]
+    if receiving != 'All receiving addresses':
+        filtered = filtered[filtered['receiving_address'] == receiving]
+    return filtered
 
-    selected_debris = st.selectbox('Select Type of Debris:', debris_filter, index=0)
-    if selected_debris != 'All':
-        df = df[df['type_debris'] == selected_debris]
-        pickup_filter = create_filter_list('pickup_address')
-        receiving_filter = create_filter_list('receiving_address')
+filtered_data = filter_data(df, selected_debris, selected_pickup_address, selected_receiving_address)
 
-    selected_pickup_address = st.selectbox('Select Pickup Address:', pickup_filter, index=0)
-    if selected_pickup_address != 'All':
-        df = df[df['pickup_address'] == selected_pickup_address]
-        receiving_filter = create_filter_list('receiving_address')
-
-    selected_receiving_address = st.selectbox('Select Receiving Address:', receiving_filter, index=0)
-    if selected_receiving_address != 'All':
-        df = df[df['receiving_address'] == selected_receiving_address]
-
-    return df
-
-filtered_data = get_filtered_data()
-
-pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
+# Color pickers
+pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')
 receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')
 
-# Drawing routes function remains as previously defined
+# Function to draw routes remains the same
 def draw_routes(filtered_data, pickup_color, receiving_color):
-    # Implement the drawing logic
+    # Implement the drawing logic here
     pass
 
 draw_routes(filtered_data, pickup_color, receiving_color)
