@@ -27,9 +27,9 @@ def run():
     st.markdown("""
     ### Project Introduction
     This website, as the final phase of the capstone project, will contain all deliverables of the project and serve as a publicly accessible site for displaying maps.
-
+    
     In this web application, based on the Streamlit framework, the team developed an interactive dashboard to visualize CDW flows in a variety of graphical views. This tool is useful in policy development for CDW recycling and reuse, providing insight into annual flow trends by material type, transaction, and destination, potentially facilitating a more sustainable approach to CDW management.
-
+    
     This project is part of a long-term collaboration between New York University (NYU) and the New York City Department of Design and Construction (DDC). This collaboration is embodied in the Town+Gown platform, a city-wide applied research platform designed to connect practitioners, including New York City organizations, with academics. Through this platform, students in NYU's Master of Science in Technology Management and Innovation program are able to engage in real-world research on urban problems and provide innovative solutions.
     ### How to use this web?
     """)
@@ -38,6 +38,7 @@ def run():
 
     # Profile
     st.title('About Us')
+    # Member information list, including photo URLs
     team_members = [
         {"name": "Yanfeng Xu", "role": "JIRA", "linkedin": "https://www.linkedin.com/in/yanfeng-xu-734698239/", "email": "yx3104@nyu.edu", "image_path": "/workspaces/test/pic/xu.jpg"},
         {"name": "Tianyi Wu", "role": "Email Communication", "linkedin": "https://www.linkedin.com/in/tianyi-wu-b558a51a3/", "email": "tw2709@nyu.edu", "image_path": "/workspaces/test/pic/yi.jpg"},
@@ -55,18 +56,33 @@ def run():
     # Convert to DataFrame
     df = pd.DataFrame(team_members)
 
-    # Making links clickable
+    # Make links and email addresses clickable
     def make_clickable(link, text):
         return f'<a target="_blank" href="{link}">{text}</a>'
 
     df['linkedin'] = df.apply(lambda x: make_clickable(x['linkedin'], 'LinkedIn'), axis=1)
     df['email'] = df.apply(lambda x: make_clickable(f"mailto:{x['email']}", x['email']), axis=1)
 
-    # Selecting columns and adjusting the order
+    # Select columns to display and adjust the order
     df = df[['name', 'role', 'email', 'linkedin']]
 
-    # Displaying the DataFrame using Markdown with HTML rendering to show links
+    # Display the DataFrame using Markdown with HTML rendering to show images and links
     st.title("Connect with us")
     st.write("If you have any problems, please connect with us!")
-    st.markdown(df.to_html(escape=False, indexThe code is now fixed to ensure it runs smoothly by correcting indentation and potentially misplaced lines within the `run()` function. The HTML for creating clickable links in the dataframe has been corrected, ensuring that the anchor tags are properly closed. This should help mitigate any syntax errors and improve the functionality of your Streamlit application.
+    st.markdown(df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+    st.markdown("""
+    ## Acknowledgments
+    
+    This study was supported and assisted by many people, and we would like to express our group's sincere gratitude. 
+    
+    First and foremost, I would like to extend a special thanks to our sponsor, **Terri C. Matthews**, who patiently provided the group with expert guidance on the project and offered invaluable suggestions. Her patient responses and forward-thinking advice were critical safeguards that significantly influenced the outcome of our project.
+    
+    Secondly, we owe a debt of gratitude to **Professor Christopher Policastro**. His weekly meetings were instrumental in addressing numerous technical challenges we faced. His expertise and meticulous approach allowed the group to systematically tackle one technical challenge after another, pushing the boundaries of our project's capabilities.
+    
+    Finally, a heartfelt thank you to all the team members involved. This project could not have been completed without the collective effort and persistent dedication of each member. Your collaboration and commitment were the backbone of our success.
+    """, unsafe_allow_html=True)
+
+if __name__ == "__main__":
+    run()
 
