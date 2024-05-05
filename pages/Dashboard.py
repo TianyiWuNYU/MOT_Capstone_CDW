@@ -1,79 +1,77 @@
-import base64
 import streamlit as st
-from streamlit.logger import get_logger
 import pandas as pd
+import pydeck as pdk
 
-LOGGER = get_logger(__name__)
+st.title('DDC Mapping Program')
 
-def load_custom_css():
-    css = """
-    <style>
-        /* Target the grid layout of Streamlit columns directly */
-        .st-cd {
-            gap: 20px; /* Adjust the gap between columns */
-        }
-        /* Adjustments for all images in the columns */
-        .stImage img {
-            width: 100%; /* Makes images responsive within the column width */
-        }
-    </style>
-    """
-    st.markdown(css, unsafe_allow_html=True)
+file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
+df = pd.read_csv(file_url)
 
-def run():
-    st.set_page_config(page_title="NYU-MOT-CDW", page_icon="👋")
-    load_custom_css() 
-    st.write("# Welcome to 2024 CDW Project! 👋")
-    st.markdown("""
-    ### Project Introduction
-    This website, as the final phase of the capstone project, will contain all deliverables of the project and serve as a publicly accessible site for displaying maps.
-    
-    In this web application, based on the Streamlit framework, the team developed an interactive dashboard to visualize CDW flows in a variety of graphical views. This tool is useful in policy development for CDW recycling and reuse, providing insight into annual flow trends by material type, transaction, and destination, potentially facilitating a more sustainable approach to CDW management.
-    
-    This project is part of a long-term collaboration between New York University (NYU) and the New York City Department of Design and Construction (DDC). This collaboration is embodied in the Town+Gown platform, a city-wide applied research platform designed to connect practitioners, including New York City organizations, with academics. Through this platform, students in NYU's Master of Science in Technology Management and Innovation program are able to engage in real-world research on urban problems and provide innovative solutions.
-    ### How to use this web?
-    """)
-    st.markdown("""<iframe width="800" height="450" src="https://cdn.pixabay.com/video/2016/12/31/6962-197634410_large.mp4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-                """, unsafe_allow_html=True)
-    
-    st.title('About Us')
-    team_members = [
-        {"name": "Yanfeng Xu", "role": "JIRA", "linkedin": "https://www.linkedin.com/in/yanfeng-xu-734698239/", "email": "yx3104@nyu.edu", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/dafd981f824bd141907fffc9e97830b.jpg"},
-        {"name": "Tianyi Wu", "role": "Email Communication", "linkedin": "https://www.linkedin.com/in/tianyi-wu-b558a51a3/", "email": "tw2709@nyu.edu", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/7fdac96ee1bacd291591efe1155f5dd.jpg"},
-        {"name": "Ruoan Ni", "role": "Meeting Notes", "linkedin": "https://www.linkedin.com/in/ruoan-ni-97815424b/", "email": "rn2429@nyu.edu", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/8720019c766d7e9d3c85f13aa935398.jpg"},
-        {"name": "Rui Xue", "role": "Meeting Moderator", "linkedin": "https://www.linkedin.com/in/rui-xue-b854731a4/", "email": "rx2161@nyu.edu", "image_path": "https://raw.githubusercontent.com/TianyiWuNYU/test/main/photo/27d8bbc6a5cd97de219a03a26ec8cb6.jpg"}
-    ]
+st.write("Data loaded successfully!")
 
-    cols = st.columns(4)
-    for i, member in enumerate(team_members):
-        with cols[i]:
-            st.image(member["image_path"], use_column_width=True)
-            st.write(member["name"])
-            st.write(member["role"])
+unique_debris_types = ['All types of debris'] + list(df['type_debris'].unique())
+selected_debris = st.selectbox('Select Type of Debris:', unique_debris_types)
 
-    df = pd.DataFrame(team_members)
-    def make_clickable(link, text):
-        return f'<a target="_blank" href="{link}">{text}</a>'
+unique_pickup_addresses = ['All pickup addresses'] + list(df['pickup_address'].unique())
+selected_pickup_address = st.selectbox('Select Pickup Address:', unique_pickup_addresses)
 
-    df['linkedin'] = df.apply(lambda x: make_clickable(x['linkedin'], 'LinkedIn'), axis=1)
-    df['email'] = df.apply(lambda x: make_clickable(f"mailto:{x['email']}", x['email']),axis=1)
-    df = df[['name', 'role', 'email', 'linkedin']]
-    st.title("Connect with us")
-    st.write("If you have any problems, please connect with us!")
-    st.markdown(df.to_html(escape=False, index=False), unsafe_allow_html=True)
+unique_receiving_addresses = ['All receiving addresses'] + list(df['receiving_address'].unique())
+selected_receiving_address = st.selectbox('Select Receiving Address:', unique_receiving_addresses)
 
-    st.markdown("""
-    ## Acknowledgments
-    
-    This study was supported and assisted by many people, and we would like to express our group's sincere gratitude. 
-    
-    First and foremost, I would like to extend a special thanks to our sponsor, **Terri C. Matthews**, who patiently provided the group with expert guidance on the project and offered invaluable suggestions. Her patient responses and forward-thinking advice were critical safeguards that significantly influenced the outcome of our project.
+pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
+receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')  
 
-    Secondly, thanks to **Professor Christopher Policastro** for his instrumental guidance and expertise which helped us tackle numerous challenges, enhancing our project's capabilities.
+filtered_data = df[
+    ((df['type_debris'] == selected_debris) | (selected_debris == 'All types of debris')) &
+    ((df['pickup_address'] == selected_pickup_address) | (selected_pickup_address == 'All pickup addresses')) &
+    ((df['receiving_address'] == selected_receiving_address) | (selected_receiving_address == 'All receiving addresses'))
+]
 
-    Lastly, thanks to all the team members for their dedication and teamwork which were vital to the success of this project.
-    """, unsafe_allow_html=True)
+def draw_routes(filtered_data, pickup_color, receiving_color):
+    if not filtered_data.empty:
+        routes = [
+            {
+                "from_coordinates": [row['pickup_lng'], row['pickup_lat']],
+                "to_coordinates": [row['receiving_lng'], row['receiving_lat']],
+                "info": f"Type of Debris: {row['type_debris']}<br>"
+                        f"Waste Quantity: {row['waste_quantity']}<br>"
+                        f"Pickup Name: {row['pickup_name']}<br>"
+                        f"Pickup Address: {row['pickup_address']}<br>"
+                        f"Generator Name: {row['generator_name']}<br>"
+                        f"Generator Address: {row['generator_address']}"
+            }
+            for _, row in filtered_data.iterrows()
+        ]
 
-if __name__ == "__main__":
-    run()
+        pickup_color_rgba = [int(pickup_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]
+        receiving_color_rgba = [int(receiving_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)] + [255]
 
+        layer = pdk.Layer(
+            "ArcLayer",
+            routes,
+            get_source_position="from_coordinates",
+            get_target_position="to_coordinates",
+            get_width=5,
+            get_tilt=15,
+            get_source_color=pickup_color_rgba,
+            get_target_color=receiving_color_rgba,
+            pickable=True,
+            auto_highlight=True,
+        )
+
+        view_state = pdk.ViewState(
+            latitude=filtered_data['pickup_lat'].mean(),
+            longitude=filtered_data['pickup_lng'].mean(),
+            zoom=6
+        )
+
+        st.pydeck_chart(pdk.Deck(
+            layers=[layer],
+            initial_view_state=view_state,
+            tooltip={"html": "<b>Route Information:</b> {info}"},
+            map_style='mapbox://styles/mapbox/light-v10'
+        ))
+    else:
+        st.error('No routes found for the selected options.')
+
+draw_routes(filtered_data, pickup_color, receiving_color)
