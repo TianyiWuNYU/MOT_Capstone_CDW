@@ -35,6 +35,7 @@ def run():
     """)
     st.markdown("""<iframe width="800" height="450" src="https://cdn.pixabay.com/video/2016/12/31/6962-197634410_large.mp4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
                 """, unsafe_allow_html=True)
+
     st.title('About Us')
     team_members = [
         {"name": "Yanfeng Xu", "role": "JIRA", "linkedin": "https://www.linkedin.com/in/yanfeng-xu-734698239/", "email": "yx3104@nyu.edu", "image_path": "path_to_xu.jpg"},
@@ -61,20 +62,19 @@ def run():
     st.write("If you have any problems, please connect with us!")
     st.markdown(df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
-    st.markIt appears that the paths to the images you're trying to load into your Streamlit application are incorrect, or the files are not accessible from the specified paths. You need to ensure that the paths you've specified for your image files are correct and accessible by the Streamlit server. Here's how you can correct the paths in your code:
+    st.markdown("""
+    ## Acknowledgments
+    
+    This study was supported and assisted by many people, and we would like to express our group's sincere gratitude. 
+    
+    First and foremost, I would like to extend a special thanks to our sponsor, **Terri C. Matthews**, who patiently provided thegroup with expert guidance on the project and offered invaluable suggestions. Her responses and advice were crucial in shaping the project's direction.
 
-1. Verify the correct paths to your images. Make sure they exist in the specified location.
-2. If you're running the app locally, ensure that the paths are relative to the script or use absolute paths.
-3. If the app is hosted, ensure that the server has access to the file paths and that they are included in your deployment.
+    Secondly, thanks to **Professor Christopher Policastro** for his instrumental guidance and expertise which helped us tackle numerous challenges, enhancing our project's capabilities.
 
-Here is an example of how you might specify a path to an image if the images are stored in a directory called `images` in the same directory as your script:
+    Lastly, thanks to all the team members for their dedication and teamwork which were vital to the success of this project.
+    """, unsafe_allow_html=True)
 
-```python
-    team_members = [
-        {"name": "Yanfeng Xu", "role": "JIRA", "linkedin": "https://www.linkedin.com/in/yanfeng-xu-734698239/", "email": "yx3104@nyu.edu", "image_path": "./images/xu.jpg"},
-        {"name": "Tianyi Wu", "role": "Email Communication", "linkedin": "https://www.linkedin.com/in/tianyi-wu-b558a51a3/", "email": "tw2709@nyu.edu", "image_path": "./images/yi.jpg"},
-        {"name": "Ruoan Ni", "role": "Meeting Notes", "linkedin": "https://www.linkedin.com/in/ruoan-ni-97815424b/", "email": "rn2429@nyu.edu", "image_path": "./images/mao.jpg"},
-        {"name": "Rui Xue", "role": "Meeting Moderator", "linkedin": "https://www.linkedin.com/in/rui-xue-b854731a4/", "email": "rx2161@nyu.edu", "image_path": "./images/rui.jpg"}
-    ]
+if __name__ == "__main__":
+    run()
 
 
