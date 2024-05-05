@@ -8,32 +8,30 @@ file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv
 df = pd.read_csv(file_url)
 st.write("Data loaded successfully!")
 
-# Ensure correct data types
-df['type_debris'] = df['type_debris'].astype(str)
-df['pickup_address'] = df['pickup_address'].astype(str)
-df['receiving_address'] = df['receiving_address'].astype(str)
+# Ensuring session state keys exist with defaults before use
+if 'selected_debris' not in st.session_state:
+    st.session_state['selected_debris'] = 'All types of debris'
+if 'selected_pickup_address' not in st.session_state:
+    st.session_state['selected_pickup_address'] = 'All pickup addresses'
+if 'selected_receiving_address' not in st.session_state:
+    st.session_state['selected_receiving_address'] = 'All receiving addresses'
 
-# Selection options
-type_debris_options = ['All types of debris'] + sorted(df['type_debris'].unique().tolist())
-pickup_address_options = ['All pickup addresses'] + sorted(df['pickup_address'].unique().tolist())
-receiving_address_options = ['All receiving addresses'] + sorted(df['receiving_address'].unique().tolist())
+selected_debris = st.selectbox('Select Type of Debris:', ['All types of debris'] + sorted(df['type_debris'].unique().tolist()), index=0)
+selected_pickup_address = st.selectbox('Select Pickup Address:', ['All pickup addresses'] + sorted(df['pickup_address'].unique().tolist()), index=0)
+selected_receiving_address = st.selectbox('Select Receiving Address:', ['All receiving addresses'] + sorted(df['receiving_address'].unique().tolist()), index=0)
 
-selected_debris = st.selectbox('Select Type of Debris:', type_debris_options)
-selected_pickup_address = st.selectbox('Select Pickup Address:', pickup_address_options)
-selected_receiving_address = st.selectbox('Select Receiving Address:', receiving_address_options)
+pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
+receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')  
 
-# Filtering data based on selections
+# Apply filters dynamically
 filtered_data = df[
     (df['type_debris'] == selected_debris if selected_debris != 'All types of debris' else True) &
     (df['pickup_address'] == selected_pickup_address if selected_pickup_address != 'All pickup addresses' else True) &
     (df['receiving_address'] == selected_receiving_address if selected_receiving_address != 'All receiving addresses' else True)
 ]
 
-pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
-receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')  
-
-# Function to draw routes
 def draw_routes(filtered_data, pickup_color, receiving_color):
+    # Ensure there is data to plot
     if not filtered_data.empty:
         # Implementation remains the same
         pass
