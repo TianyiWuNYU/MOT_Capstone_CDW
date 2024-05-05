@@ -1,25 +1,23 @@
 import streamlit as st
 import pandas as pd
-import copy
 
-@st.cache
+@st.cache  # You might remove allow_output_mutation if you follow this strategy
 def load_data_from_github(url):
     return pd.read_csv(url)
 
+# Load data and immediately create a copy for operations
 github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
-data = load_data_from_github(github_raw_url)
+data = load_data_from_github(github_raw_url).copy()
 
-# Make a deep copy of data for manipulation
-small_table = copy.deepcopy(data[['generator_name']])
+small_table = data[['generator_name']].copy()
 small_table.reset_index(inplace=True)
 
 search_query = st.text_input("Search by generator name:")
 
 if search_query:
-    # Use a deep copy to filter data
-    filtered_table = copy.deepcopy(small_table[small_table['generator_name'].str.contains(search_query, case=False, na=False)])
+    filtered_table = small_table[small_table['generator_name'].str.contains(search_query, case=False, na=False)].copy()
 else:
-    filtered_table = copy.deepcopy(small_table)
+    filtered_table = small_table.copy()
 
 st.write("Table for `index` and `generator_name`:")
 st.dataframe(filtered_table)
