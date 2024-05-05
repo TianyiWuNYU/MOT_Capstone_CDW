@@ -33,4 +33,3 @@ if not filtered_table.empty:
     st.write(data.iloc[selected_index])
 else:
     st.write("No results found.")
-
