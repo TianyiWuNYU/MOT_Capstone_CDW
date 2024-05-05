@@ -9,30 +9,41 @@ df = pd.read_csv(file_url)
 
 st.write("Data loaded successfully!")
 
-# Initial selection conditions
-selected_debris = st.selectbox('Select Type of Debris:', ['All types of debris'] + sorted(df['type_debris'].unique().tolist()))
+# Helper function to create filter lists with default option
+def create_filter_list(column_name):
+    return ['All'] + sorted(df[column_name].dropna().unique().tolist())
 
-# Update the data based on the current selections
-if selected_debris != 'All types of debris':
-    df = df[df['type_debris'] == selected_debris]
+# Use helper function to dynamically update the lists based on selections
+def get_filtered_data():
+    debris_filter = create_filter_list('type_debris')
+    pickup_filter = create_filter_list('pickup_address')
+    receiving_filter = create_filter_list('receiving_address')
 
-selected_pickup_address = st.selectbox('Select Pickup Address:', ['All pickup addresses'] + sorted(df['pickup_address'].unique().tolist()))
+    selected_debris = st.selectbox('Select Type of Debris:', debris_filter, index=0)
+    if selected_debris != 'All':
+        df = df[df['type_debris'] == selected_debris]
+        pickup_filter = create_filter_list('pickup_address')
+        receiving_filter = create_filter_list('receiving_address')
 
-if selected_pickup_address != 'All pickup addresses':
-    df = df[df['pickup_address'] == selected_pickup_address]
+    selected_pickup_address = st.selectbox('Select Pickup Address:', pickup_filter, index=0)
+    if selected_pickup_address != 'All':
+        df = df[df['pickup_address'] == selected_pickup_address]
+        receiving_filter = create_filter_list('receiving_address')
 
-selected_receiving_address = st.selectbox('Select Receiving Address:', ['All receiving addresses'] + sorted(df['receiving_address'].unique().tolist()))
+    selected_receiving_address = st.selectbox('Select Receiving Address:', receiving_filter, index=0)
+    if selected_receiving_address != 'All':
+        df = df[df['receiving_address'] == selected_receiving_address]
 
-if selected_receiving_address != 'All receiving addresses':
-    df = df[df['receiving_address'] == selected_receiving_address]
+    return df
+
+filtered_data = get_filtered_data()
 
 pickup_color = st.color_picker('Choose a color for pickup addresses', '#FF6347')  
-receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')  
+receiving_color = st.color_picker('Choose a color for receiving addresses', '#4682B4')
 
-filtered_data = df.copy()
-
+# Drawing routes function remains as previously defined
 def draw_routes(filtered_data, pickup_color, receiving_color):
-    # Drawing routes function remains unchanged
+    # Implement the drawing logic
     pass
 
 draw_routes(filtered_data, pickup_color, receiving_color)
