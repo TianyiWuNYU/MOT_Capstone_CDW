@@ -6,7 +6,7 @@ st.write("# Data Input")
 
 st.markdown(
     """
-    **This page is still under construction, and now we need the dataset files uploaded. more features are coming soon.**
+    **This page is designed for users to input data.**
     """
 )
 
@@ -55,7 +55,7 @@ pickup_book = load_pickup_book()
 pickup_book['display'] = pickup_book['name'] + ' - ' + pickup_book['address']
 
 pickup_option = st.selectbox('Choose Existing Pickup Location', [''] + pickup_book['display'].tolist(), on_change=lambda: update_pickup(pickup_option), key="pickup")
-gene_option = st.selectbox('Choose Existing Generator Location', [''] + pickup_book['display'].tolist(), on_change=lambda: update_gene(gene_option), key="generator")
+gene_option = st.selectbox('Choose Existing Receiving Location', [''] + pickup_book['display'].tolist(), on_change=lambda: update_gene(gene_option), key="generator")
 
 def update_pickup(option):
     st.session_state.selected_pickup = option
@@ -97,7 +97,7 @@ with st.form("my_form"):
     pk_lat = st.text_input("Latitude", value=st.session_state.pickup_lat, key="pkt")
     pk_lng = st.text_input("Longtitude", value=st.session_state.pickup_lng, key="pkg")
 
-    st.write("### Generator Location")
+    st.write("### Receiving Location")
     gn_name = st.text_input("Location Name", value=st.session_state.gene_name, key="gnn")
     gn_add = st.text_input("Address", value=st.session_state.gene_add, key="gna")
     gn_city = st.text_input("City", value=st.session_state.gene_city, key="gnc")
