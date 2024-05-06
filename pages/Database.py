@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-@st.cache(allow_output_mutation=True)  # This allows the function to mutate the cached data.
+@st.cache(allow_output_mutation=True)
 def load_data_from_github(url):
     return pd.read_csv(url)
 
@@ -9,9 +9,9 @@ def load_data_from_github(url):
 github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
 data = load_data_from_github(github_raw_url)
 
-# We ensure that we are working with a copy of the data for display and manipulation to avoid direct mutation.
+# Working with a copy of the data to avoid direct mutation.
 small_table = data[['generator_name']].copy()
-small_table.reset_index(inplace=True)
+small_table.reset_index(inplace=True)  
 
 # Implement a search functionality
 search_query = st.text_input("Search by receiving name:")
@@ -22,7 +22,7 @@ if search_query:
 else:
     filtered_table = small_table
 
-st.write("Table for `index` and `receiving_name`:")
+st.write("Table for `index` and `generator_name`:")
 st.dataframe(filtered_table)
 
 # Allow selection of an index from the filtered results
