@@ -24,25 +24,27 @@ generator_book = load_gene_book()
 generator_book['display'] = generator_book['name'] + ' - ' + generator_book['address']
 
 def update_pickup(option):
-    selected_pickup = pickup_book[pickup_book['display'] == option].iloc[0]
-    st.session_state.pickup_name = selected_pickup['name']
-    st.session_state.pickup_add = selected_pickup['address']
-    st.session_state.pickup_city = selected_pickup['city']
-    st.session_state.pickup_state = selected_pickup['state']
-    st.session_state.pickup_zip = selected_pickup['zip']
-    st.session_state.pickup_lat = selected_pickup['lat']
-    st.session_state.pickup_lng = selected_pickup['lng']
+    if option:
+        selected_pickup = pickup_book[pickup_book['display'] == option].iloc[0]
+        st.session_state.pickup_name = selected_pickup['name']
+        st.session_state.pickup_add = selected_pickup['address']
+        st.session_state.pickup_city = selected_pickup['city']
+        st.session_state.pickup_state = selected_pickup['state']
+        st.session_state.pickup_zip = selected_pickup['zip']
+        st.session_state.pickup_lat = selected_pickup['lat']
+        st.session_state.pickup_lng = selected_pickup['lng']
 
 def update_generator(option):
-    selected_gene = generator_book[generator_book['display'] == option].iloc[0]
-    st.session_state.gene_name = selected_gene['name']
-    st.session_state.gene_add = selected_gene['address']
-    st.session_state.gene_city = selected_gene['city']
-    st.session_state.gene_state = selected_gene['state']
-    st.session_state.gene_zip = selected_gene['zip']
+    if option:
+        selected_generator = generator_book[generator_book['display'] == option].iloc[0]
+        st.session_state.gene_name = selected_generator['name']
+        st.session_state.gene_add = selected_generator['address']
+        st.session_state.gene_city = selected_generator['city']
+        st.session_state.gene_state = selected_generator['state']
+        st.session_state.gene_zip = selected_generator['zip']
 
-pickup_option = st.selectbox('Choose Existing Pickup Location', [''] + pickup_book['display'].tolist(), on_change=lambda: update_pickup(st.session_state.pickup_selection), key='pickup_selection')
-generator_option = st.selectbox('Choose Existing Generator Location', [''] + generator_book['display'].tolist(), on_change=lambda: update_generator(st.session_state.generator_selection), key='generator_selection')
+pickup_option = st.selectbox('Choose Existing Pickup Location', [''] + pickup_book['display'].tolist(), key='pickup_selection', on_change=update_pickup)
+generator_option = st.selectbox('Choose Existing Generator Location', [''] + generator_book['display'].tolist(), key='generator_selection', on_change=update_generator)
 
 with st.form("my_form"):
     st.write("### Pickup Location Details")
