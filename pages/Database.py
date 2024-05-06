@@ -18,7 +18,8 @@ search_query = st.text_input("Search by generator name:")
 
 # Filter data based on the search input
 if search_query:
-    filtered_table = small_table[small_table['generator_name'].str.contains(search_query, case=False)].copy()
+   filtered_table = small_table[small_table['generator_name'].fillna('').str.contains(search_query, case=False)].copy()
+
 else:
     filtered_table = small_table
 
