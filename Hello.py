@@ -33,7 +33,8 @@ def run():
     This project is part of a long-term collaboration between New York University (NYU) and the New York City Department of Design and Construction (DDC). This collaboration is embodied in the Town+Gown platform, a city-wide applied research platform designed to connect practitioners, including New York City organizations, with academics. Through this platform, students in NYU's Master of Science in Technology Management and Innovation program are able to engage in real-world research on urban problems and provide innovative solutions.
     ### How to use this web?
     """)
-    video_path = "/workspaces/test/vi.mp4"
+    
+    video_path = "1460f3423218914babc94c5a3505768a.mp4"
     st.video(video_path)
     
     st.title('About Us')
