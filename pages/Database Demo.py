@@ -14,7 +14,7 @@ small_table = data[['generator_name']].copy()
 small_table.reset_index(inplace=True)
 
 # Implement a search functionality
-search_query = st.text_input("Search by generator name:")
+search_query = st.text_input("Search by receiving name:")
 
 # Filter data based on the search input
 if search_query:
@@ -22,7 +22,7 @@ if search_query:
 else:
     filtered_table = small_table
 
-st.write("Table for `index` and `generator_name`:")
+st.write("Table for `index` and `receiving_name`:")
 st.dataframe(filtered_table)
 
 # Allow selection of an index from the filtered results
