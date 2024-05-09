@@ -12,7 +12,6 @@ data = load_data(file_path)
 
 # We ensure that we are working with a copy of the data for display and manipulation to avoid direct mutation.
 small_table = data[['generator_name']].copy()
-small_table.reset_index(inplace=True)
 
 # Implement a search functionality
 search_query = st.text_input("Search by generator name:")
