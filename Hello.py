@@ -34,7 +34,7 @@ def run():
     ### How to use this web?
     """)
     
-    video_path = "video/introduction.mp4"
+    video_path = "video/Introduction.mp4"
     st.video(video_path)
     
     st.title('About Us')
