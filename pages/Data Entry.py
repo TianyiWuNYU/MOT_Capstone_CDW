@@ -1,4 +1,4 @@
-import streamlit as st
+eimport streamlit as st
 import pandas as pd
 import csv
 
@@ -97,7 +97,7 @@ with st.form("my_form"):
     pk_lat = st.text_input("Latitude", value=st.session_state.pickup_lat, key="pkt")
     pk_lng = st.text_input("Longtitude", value=st.session_state.pickup_lng, key="pkg")
 
-    st.write("### Receiving Location")
+    st.write("### Generator Location")
     gn_name = st.text_input("Location Name", value=st.session_state.gene_name, key="gnn")
     gn_add = st.text_input("Address", value=st.session_state.gene_add, key="gna")
     gn_city = st.text_input("City", value=st.session_state.gene_city, key="gnc")
