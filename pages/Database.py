@@ -3,7 +3,12 @@ import pandas as pd
 
 @st.cache(allow_output_mutation=True)  # This allows the function to mutate the cached data.
 
-data = pd.read_csv('data/cdw_csv_processed_example.csv', encoding='unicode_escape')
+def load_data(path):
+    return pd.read_csv(path, encoding='unicode_escape')
+
+# Load data
+file_path = 'data/cdw_csv_processed_example.csv'
+data = load_data(file_path)
 
 # We ensure that we are working with a copy of the data for display and manipulation to avoid direct mutation.
 small_table = data[['generator_name']].copy()
