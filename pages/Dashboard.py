@@ -4,7 +4,7 @@ import pydeck as pdk
 
 st.title('DDC Mapping Program')
 
-file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
+file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed_example.csv'
 df = pd.read_csv(file_url)
 
 st.write("Data loaded successfully!")
@@ -37,8 +37,8 @@ def draw_routes(filtered_data, pickup_color, receiving_color):
                         f"Waste Quantity: {row['waste_quantity']}<br>"
                         f"Pickup Name: {row['pickup_name']}<br>"
                         f"Pickup Address: {row['pickup_address']}<br>"
-                        f"Receiving Name: {row['generator_name']}<br>"
-                        f"Receiving Address: {row['generator_address']}"
+                        f"Receiving Name: {row['receiving_name']}<br>"
+                        f"Receiving Address: {row['receiving_address']}"
             }
             for _, row in filtered_data.iterrows()
         ]
