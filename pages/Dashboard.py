@@ -4,7 +4,7 @@ import pydeck as pdk
 
 st.title('DDC Mapping Program')
 
-file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
+file_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed_example.csv'
 df = pd.read_csv(file_url)
 
 st.write("Data loaded successfully!")
