@@ -2,12 +2,8 @@ import streamlit as st
 import pandas as pd
 
 @st.cache(allow_output_mutation=True)  # This allows the function to mutate the cached data.
-def load_data_from_github(url):
-    return pd.read_csv(url, encoding='unicode_escape')
 
-# Load data
-github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed_example.csv'
-data = load_data_from_github(github_raw_url)
+data = pd.read_csv('data/cdw_csv_processed_example.csv', encoding='unicode_escape')
 
 # We ensure that we are working with a copy of the data for display and manipulation to avoid direct mutation.
 small_table = data[['generator_name']].copy()
