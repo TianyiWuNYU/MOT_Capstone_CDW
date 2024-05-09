@@ -6,7 +6,7 @@ def load_data_from_github(url):
     return pd.read_csv(url)
 
 # Load data
-github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed.csv'
+github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed_example.csv'
 data = load_data_from_github(github_raw_url)
 
 # We ensure that we are working with a copy of the data for display and manipulation to avoid direct mutation.
