@@ -3,7 +3,7 @@ import pandas as pd
 
 @st.cache(allow_output_mutation=True)  # This allows the function to mutate the cached data.
 def load_data_from_github(url):
-    return pd.read_csv(url)
+    return pd.read_csv(url, encoding='unicode_escape')
 
 # Load data
 github_raw_url = 'https://raw.githubusercontent.com/TianyiWuNYU/test/main/data/cdw_csv_processed_example.csv'
